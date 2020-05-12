@@ -194,7 +194,7 @@ Account ServiceとGoods Serviceは、BFFから呼び出される、マイクロ�
 マイクロサービスを跨いだ、トランザクション処理が発生しないように分割する。例えば、簡易ECサイトの場合だと、Goods Serivceのトランザクション
 はAccount Serviceが持つデータを更新しないようにする（逆方向も同様）。</p>
 <div class="figure align-center" id="id5">
-<a class="reference internal image-reference" href="../img/overview.png"><img alt="" src="../img/overview.png" /></a>
+<a class="reference internal image-reference" href="./_static/img/overview.png"><img alt="" src="./_static/img/overview.png" /></a>
 <p class="caption"><span class="caption-text">全体イメージ（モノリシック vs マイクロサービス）</span></p>
 </div>
 </div>
@@ -285,7 +285,7 @@ Account ServiceとGoods Serviceは、BFFから呼び出される、マイクロ�
 <div class="section" id="id4">
 <h3>システム全体構成（ヘキサゴナルアーキテクチャ）<a class="headerlink" href="#id4" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <div class="figure align-center" id="id6">
-<a class="reference internal image-reference" href="../img/hexArchitecture.png"><img alt="" src="../img/hexArchitecture.png" /></a>
+<a class="reference internal image-reference" href="../_static/img/hexArchitecture.png"><img alt="" src="../_static/img/hexArchitecture.png" /></a>
 <p class="caption"><span class="caption-text">システム全体構成（ヘキサゴナルアーキテクチャ）</span></p>
 </div>
 <div class="admonition note">
@@ -849,7 +849,7 @@ public void update<span class="o">(</span>Account account<span class="o">)</span
 失敗以前に行った変更を、打ち消すトランザクションである。
 例えば、以下の例では、フォーワードトランザクションTn+1が失敗した場合、補償トランザクションCnからC1を実行している。</p>
 <div class="figure align-center" id="id7">
-<a class="reference internal image-reference" href="../img/conpensatingTransaction.png"><img alt="" src="../img/conpensatingTransaction.png" /></a>
+<a class="reference internal image-reference" href="../_static/img/conpensatingTransaction.png"><img alt="" src="../_static/img/conpensatingTransaction.png" /></a>
 <p class="caption"><span class="caption-text">補償トランザクションの実行イメージ</span></p>
 </div>
 <p>引用: Microservice Patterns, Chris Richardson</p>
@@ -907,7 +907,7 @@ public void update<span class="o">(</span>Account account<span class="o">)</span
 SagaManagerクラスから実行。Sagaの定義（各STEPのトランザクションの定義とSTEPの順序の定義）は、
 SagaPaticipantクラスとSagaDefinitionクラスを使ってDIする。</p>
 <div class="figure align-center" id="id8">
-<a class="reference internal image-reference" href="../img/sagaSequence.png"><img alt="" src="../img/sagaSequence.png" /></a>
+<a class="reference internal image-reference" href="../_static/img/sagaSequence.png"><img alt="" src="../_static/img/sagaSequence.png" /></a>
 <p class="caption"><span class="caption-text">処理シーケンスイメージ</span></p>
 </div>
 <p><strong>SagaPaticipantクラス</strong></p>

@@ -16,7 +16,7 @@ Account ServiceとGoods Serviceは、BFFから呼び出される、マイクロ�
 マイクロサービスを跨いだ、トランザクション処理が発生しないように分割する。例えば、簡易ECサイトの場合だと、Goods Serivceのトランザクション
 はAccount Serviceが持つデータを更新しないようにする（逆方向も同様）。
     
-.. figure:: ../img/overview.png
+.. figure:: ./_static/img/overview.png
    :scale: 40%
    :align: center
    :alt: 
@@ -59,7 +59,7 @@ Account ServiceとGoods Serviceは、BFFから呼び出される、マイクロ�
 ^^^^^^^^^^^^^^^
 
 
-.. figure:: ../img/hexArchitecture.png
+.. figure:: ../_static/img/hexArchitecture.png
    :scale: 40%
    :align: center
    :alt: 
@@ -442,7 +442,7 @@ Order SerivceのSaga Transactionの設計と実装
 失敗以前に行った変更を、打ち消すトランザクションである。
 例えば、以下の例では、フォーワードトランザクションTn+1が失敗した場合、補償トランザクションCnからC1を実行している。
 
-.. figure:: ../img/conpensatingTransaction.png
+.. figure:: ../_static/img/conpensatingTransaction.png
    :scale: 40%
    :align: center
    :alt: 
@@ -475,7 +475,7 @@ Order ServiceのServiceクラスから、Sagaの実行に必要な情報をSagaS
 SagaManagerクラスから実行。Sagaの定義（各STEPのトランザクションの定義とSTEPの順序の定義）は、
 SagaPaticipantクラスとSagaDefinitionクラスを使ってDIする。
 
-.. figure:: ../img/sagaSequence.png
+.. figure:: ../_static/img/sagaSequence.png
    :scale: 40%
    :align: center
    :alt: 
