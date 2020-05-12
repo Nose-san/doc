@@ -1,0 +1,56 @@
+Spring Web
+=========================
+
+REST APIクライアント
+--------------
+
+* RestOperationsのDI
+ 以下のように、rootUriを指定したRestTemplateを登録。
+
+    .. sourcecode:: bash                
+         :linenos:
+
+         # offset=2, limit=3 の場合
+         @Bean
+         public RestOperations restOperations(RestTemplateBuilder restTemplateBuilder){
+            return restTemplateBuilder.rootUri(serviceProperties.getDns()).build();
+         }
+
+ rootURIのの定義方法は以下のように行うことで、application.ymlに定義したrootURIを取得できるようにする。
+
+   * application.ymlにDNS名を設定する。
+
+   .. sourcecode:: bash                
+         :linenos:
+
+         service:
+             dns: http://localhost:8082
+
+   * @ConfigurationPropertiesをアノテーションした、ServicePropatiesクラスをServiceパッケージ直下に作成し、
+     getDnsでDNS名を取得できるようにしておく。
+
+   .. sourcecode:: bash                
+         :linenos:
+
+          @Data
+          @Component
+          @ConfigurationProperties(prefix = "service")
+          public class ServiceProperties {
+
+             private String dns;
+
+          }
+
+* RestTemplateを使った実装
+ RestOperationsインタフェースをDIして実装。RestTmeplateを直読み出さず、インタフェースを読み出すことで、
+ モジュールの祖結合性を保つ。
+
+* リソースの取得
+    * リソースクラスの定義
+
+    * 単一のJSONを取得する場合
+
+    * 配列のJSONを取得する場合
+
+    * レスポンスのBodyだけでなく、Headerも取得したい場合
+

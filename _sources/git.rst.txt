@@ -1,8 +1,79 @@
-=========================
 git
 =========================
 
-内容
-====
+リポジトリを作成してからプッシュするまでの流れ
+--------------
 
-ああああああ
+#. Github上でリポジトリを作成（例：doc）
+    
+#. 作成したリポジトリをクローン
+
+    .. sourcecode:: bash
+     :linenos:
+
+     git clone https://github.com/Nose-san/doc.git
+
+#. ブランチを作成（ブランチを切る）
+
+    .. sourcecode:: bash                
+     :linenos:
+
+      cd doc
+      git branch master
+      git branch gh-pages
+    
+    .. note::
+
+     gh-pagesブランチは、github pagesで必要なブランチ
+
+#. ブランチの切り替え（チェックアウト）
+
+    .. sourcecode:: bash
+      :linenos:
+
+      git checkout gh-pages
+
+#. 開発
+
+    #. クローンによって作成されフォルダ配下に、管理したい資材をコピー
+
+    #. 資材の修正、新規作成
+
+#. コミットしたい資材の選択
+
+    .. sourcecode:: bash
+      :linenos:
+
+      # ディレクトリ単位で指定したい場合の例
+      git add .
+
+#. 資材のコミット
+
+    .. sourcecode:: bash
+      :linenos:
+
+      git commit
+
+#. 資材のプッシュ
+
+    .. sourcecode:: bash
+      :linenos:
+
+      git push origin gh-pages
+
+
+
+ローカルリポジトリを削除する方法
+--------------
+資材をgit管理対象から外したいときに行う。
+
+#. リポジトリのルートディレクトリに移動し、.gitディレクトリを削除
+
+    .. sourcecode:: bash
+      :linenos:
+
+      # docディレクトリがリポジトリのルートである場合 
+      cd doc
+
+      # rf オプションを付けて、確認メッセージを出さずに、ディレクトリ内を再帰的に削除
+      rm -rf .git

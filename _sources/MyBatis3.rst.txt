@@ -2,7 +2,41 @@
 MyBatis3
 =========================
 
-内容
+Mapperのスキャン設定
+====
+* Spring bootの場合
+  Mapperインタフェースに@Mapperを付与。
+
+          .. sourcecode:: bash                
+           :linenos:
+
+           @Mapper
+            public interface GoodsRepository {
+                //omit
+            }
+
+           
+* Springの場合
+  *projectName*-infra.xmlに、以下のように定義。
+
+        .. sourcecode:: bash                
+           :linenos:
+
+           <!-- scan for Mappers -->
+           <mybatis:scan base-package="com.example.sessiontutorial.domain.repository.account" />
+
+範囲検索
 ====
 
-ああああああ
+* 実装
+
+    * Mapperインターフェイス（Repository層のSQL実行のインタフェース）のメソッドの引数に、RowBoundsを指定
+
+    * Mapperメソッドの呼び出しを、Service層から行う。以下のように、取得開始までのスキップ件数（offset）と
+     最大取得件数（limit）を指定し、RowBoundsコンストラクタを呼出
+
+        .. sourcecode:: bash                
+           :linenos:
+
+           # offset=2, limit=3 の場合
+           RowBounds rowBounds = new RowBounds(2, 3)

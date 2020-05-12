@@ -36,7 +36,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="索引" href="genindex.html" />
     <link rel="search" title="検索" href="search.html" />
-    <link rel="next" title="Spring Boot" href="Spring-Boot.html" /> 
+    <link rel="next" title="Spring Core" href="Spring-Core.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -82,15 +82,22 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="Spring-Core.html">Spring Core</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Spring-Boot.html">Spring Boot</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Spring-Session.html">Spring Session</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Spring-Security.html">Spring Security</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Spring-MVC.html">Spring MVC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Spring-Web.html">Spring Web</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Spring-Data.html">Spring Data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="MyBatis3.html">MyBatis3</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Spring-to-Spring-boot.html">SpringからSpring bootへの移行</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Docker.html">Docker</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Microservice.html">Microservice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="WebAPI.html">Web API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="git.html">git</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Lombok.html">Lombok</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Linux.html">Linux</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Sphinx.html">Sphinx</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
@@ -166,6 +173,10 @@
 <div class="toctree-wrapper compound">
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="Spring-Core.html">Spring Core</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Spring-Core.html#di">DI</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="Spring-Boot.html">Spring Boot</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="Spring-Boot.html#id1">内容</a></li>
 </ul>
@@ -175,19 +186,29 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="Spring-Security.html">Spring Security</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="Spring-Security.html#id1">内容</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Spring-Security.html#id1">トラブルシューティング</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="Spring-MVC.html">Spring MVC</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="Spring-MVC.html#id1">内容</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Spring-MVC.html#id1">例外ハンドリング</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Spring-MVC.html#validation-error">Validation Error</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Spring-Web.html">Spring Web</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Spring-Web.html#rest-api">REST APIクライアント</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Spring-Data.html">Spring Data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Spring-Data.html#pageable">Pageable</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="MyBatis3.html">MyBatis3</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="MyBatis3.html#id1">内容</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MyBatis3.html#mapper">Mapperのスキャン設定</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MyBatis3.html#id1">範囲検索</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="Spring-to-Spring-boot.html">SpringからSpring bootへの移行</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="Spring-to-Spring-boot.html#id1">内容</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Spring-to-Spring-boot.html#id1">1</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="Docker.html">Docker</a><ul>
@@ -195,11 +216,31 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="Microservice.html">Microservice</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="Microservice.html#id1">内容</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Microservice.html#ec">簡易ECサイトののマイクロサービスアーキテクチャ化</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="WebAPI.html">Web API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="WebAPI.html#uri">URI設計</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WebAPI.html#id1">ページネーション</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WebAPI.html#id2">例外ハンドリング</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WebAPI.html#id3">エラーメッセージ</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="git.html">git</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="git.html#id1">内容</a></li>
+<li class="toctree-l2"><a class="reference internal" href="git.html#id1">リポジトリを作成してからプッシュするまでの流れ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="git.html#id2">ローカルリポジトリを削除する方法</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Lombok.html">Lombok</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Lombok.html#id1">トラブルシューティング</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Linux.html">Linux</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Linux.html#id1">コマンド</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Sphinx.html">Sphinx</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Sphinx.html#id1">自動ビルド</a></li>
 </ul>
 </li>
 </ul>
@@ -225,14 +266,6 @@
 </ul>
 </div>
 </div>
-<div class="section" id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="このヘッドラインへのパーマリンク">¶</a></h1>
-<ul class="simple">
-<li><a class="reference internal" href="genindex.html"><span class="std std-ref">索引</span></a></li>
-<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">モジュール索引</span></a></li>
-<li><a class="reference internal" href="search.html"><span class="std std-ref">検索ページ</span></a></li>
-</ul>
-</div>
 
 
            </div>
@@ -242,7 +275,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="Spring-Boot.html" class="btn btn-neutral float-right" title="Spring Boot" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="Spring-Core.html" class="btn btn-neutral float-right" title="Spring Core" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
     </div>

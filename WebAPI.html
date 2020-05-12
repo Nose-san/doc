@@ -1,0 +1,341 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="ja" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="ja" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Web API &mdash; test_sphinx 1.0.0 ドキュメント</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script type="text/javascript" src="_static/translations.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="git" href="git.html" />
+    <link rel="prev" title="Microservice" href="Microservice.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> test_sphinx
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Spring-Boot.html">Spring Boot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Spring-Session.html">Spring Session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Spring-Security.html">Spring Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Spring-MVC.html">Spring MVC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MyBatis3.html">MyBatis3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Spring-to-Spring-boot.html">SpringからSpring bootへの移行</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Docker.html">Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Microservice.html">Microservice</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Web API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#uri">URI設計</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">ページネーション</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">例外ハンドリング</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">エラーメッセージ</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="git.html">git</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Lombok.html">Lombok</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Linux.html">Linux</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="UX.html">UX</a></li>
+<li class="toctree-l1"><a class="reference internal" href="UI.html">UI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Design-Process.html">デザインプロセス</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">test_sphinx</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Web API</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/WebAPI.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="web-api">
+<h1>Web API<a class="headerlink" href="#web-api" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<div class="section" id="uri">
+<h2>URI設計<a class="headerlink" href="#uri" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>以下のような命名規則が考えられる。</p>
+<blockquote>
+<div>/<em>サービス名</em>/api/<em>バージョン</em>/<em>リソース名</em></div></blockquote>
+<p>例えば、サービス名が/backend/goods/、バージョンがv1、リソース名がgoodsの場合、以下のようになる。</p>
+<blockquote>
+<div>/backend/goods/api/v1/goods</div></blockquote>
+</div>
+<div class="section" id="id1">
+<h2>ページネーション<a class="headerlink" href="#id1" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>たくさんあるデータの一部を取得する際、パラメータで取得数と取得位置の指定が必要。SQLのSELC文で
+limitとoffsetに該当。以下のような指定方法が一般的。</p>
+<blockquote>
+<div><ul class="simple">
+<li>per_page=50&amp;page=3</li>
+<li>limit=50&amp;offset=100</li>
+</ul>
+</div></blockquote>
+<p>提供するAPIとしては、limit（取得数）とoffset（取得位置）の方が自由度が高いと考えるので、そちらを採用し、
+BFF側で、Viewから渡されてくるPageableオブジェクトを使ってオフセットを算出し、API呼び出す実装とする。
+具体的には、pageable.getPageSize()でlimit、pageable.getOffset()でoffsetを取得する。</p>
+</div>
+<div class="section" id="id2">
+<h2>例外ハンドリング<a class="headerlink" href="#id2" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<ul>
+<li><dl class="first docutils">
+<dt>設計</dt>
+<dd><ul class="first last">
+<li><p class="first">プロジェクト設計</p>
+<blockquote>
+<div><ul class="simple">
+<li>各サービスのプロジェクトとは別に、commonプロジェクトを作成する。
+但し、現状、multi moule構成を組めず、domainやappパッケージど同階層に
+apinfra.exeptionのパケージを作成した。</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">例外種別</p>
+<blockquote>
+<div><ul class="simple">
+<li>ビジネス例外
+システム的には問題無いが、業務的に問題のある例外。
+例えば、商品検索APIで該当しない商品IDを指定した場合、Repository層のクラスからは、
+Nullが正常に返ってくるが、業務的に問題がある場合は、Service層でビジネス例外を、throwする。</li>
+<li>システム例外</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p class="first">実装</p>
+<blockquote>
+<div><ul class="simple">
+<li>例外ハンドラクラスの実装</li>
+</ul>
+<blockquote>
+<div><p>&#64;ExceptionHandlerを付与したメソッドで、各例外クラスに応じた処理を実装する。
+例外クラスから、例外レスポンスへの変換も行う。
+ResponseEntity&lt;&gt;のジェネリクスに、例外レスポンスの型を指定して返却する。
+ResponseEntity&lt;&gt;のインスタンス作成方法は、以下の2パターンある。</p>
+<blockquote>
+<div><ul class="simple">
+<li>ResponseEntityExceptionHandlerを継承し、handleExceptionInternalメソッドを読み出し作成</li>
+</ul>
+<blockquote>
+<div><p>bodyとHTTP Statusを指定する場合は、以下のように実装する。</p>
+</div></blockquote>
+<ul class="simple">
+<li>ResponseEntityのコンストラクタで生成。</li>
+</ul>
+<blockquote>
+<div><p>bodyとHTTP Statusを指定する場合は、以下のように実装する。</p>
+<p>ResponseEntityの仕様</p>
+<p><a class="reference external" href="https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/ResponseEntity.html">https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/ResponseEntity.html</a></p>
+</div></blockquote>
+</div></blockquote>
+<p>ServiceクラスやControllerクラスでthorwsされた例外をハンドル。</p>
+</div></blockquote>
+<ul class="simple">
+<li>例外クラスの実装</li>
+</ul>
+<blockquote>
+<div><p>ビジネス例外クラスは、Exceptionクラスを継承して実装し、
+システム例外クラスは、RuntimeExceptionクラスを継承して実装する。</p>
+</div></blockquote>
+<ul class="simple">
+<li>例外レスポンス定義</li>
+</ul>
+<blockquote>
+<div><p>例外クラスをそのまま返すと、スタックトレースなど、システムの内部情報が見えてしまうので、
+必要な値を抜粋して返す。DozerのMapperを使って変換する例は以下の通り。</p>
+</div></blockquote>
+<ul class="simple">
+<li>例外を発生させる実装</li>
+</ul>
+<blockquote>
+<div><p>例外種別に応じて、実装する場所が異る。</p>
+<blockquote>
+<div><ul class="simple">
+<li>ビジネス例外は、Service層にてビジネス例外をthrow。</li>
+</ul>
+</div></blockquote>
+</div></blockquote>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="id3">
+<h2>エラーメッセージ<a class="headerlink" href="#id3" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>MessageSourceをインジェクションして利用する。classpath:message.propertiesにメッセージを定義する。</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="git.html" class="btn btn-neutral float-right" title="git" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Microservice.html" class="btn btn-neutral float-left" title="Microservice" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, nosey
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

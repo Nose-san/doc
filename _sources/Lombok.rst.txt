@@ -1,0 +1,8 @@
+Lombok
+=========================
+
+トラブルシューティング
+--------------
+
+* can not resolve bulder
+ IntelliJでは、Lombokプラグインインストール後、IntelliJの再起動が必要。

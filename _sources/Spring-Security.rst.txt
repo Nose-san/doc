@@ -2,7 +2,29 @@
 Spring Security
 =========================
 
-内容
+トラブルシューティング
 ====
 
-ああああああ
+* permitしているURIのはずが、Postだと403になる。
+
+  Spring SecurityのCSRF対策によるもの。以下ようにCSRFをdisableにすると通る。
+
+    .. sourcecode:: bash                
+        :linenos:
+
+        @Configuration
+        @EnableWebSecurity
+        public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+            @Override
+            protected void configure(HttpSecurity http) throws Exception {
+                    http.authorizeRequests()
+                        .antMatchers("/api/v1/account/**").permitAll()
+                        .anyRequest().authenticated()
+                        .and().csrf().disable();
+
+* 「org.apache.ibatis.binding.BindingException: Invalid bound statement (not found): 」が出たとき以下を疑う。
+
+    * Mapperクラス（リポジトリクラス）に@Mapperがついているか
+
+    * XMLファイルの配置ディレクトリは正しいか。例えば、「xxx/yyy/zzz」のつもりが、「xxx.yyy.zzz」になっていたりしないか。

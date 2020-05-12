@@ -1,8 +1,633 @@
-=========================
+
+
 Microservice
 =========================
 
-内容
-====
+簡易ECサイトののマイクロサービスアーキテクチャ化
+--------------
+terasolunaチュートリアルの簡易ECサイトを使って、マイクロサービスアーキテクチャ移行検証を行った。
 
-ああああああ
+サービス分割単位
+^^^^^^^^^^^^^^
+
+terasolunaチュートリアルの簡易ECサイトを、Goods Service（商品）と、Account Serive（アカウント）、Order Service（注文）に機能分割する。
+Order Serviceは、Goods ServiceとAccount Serviceを呼び出すBFFであり、
+Account ServiceとGoods Serviceは、BFFから呼び出される、マイクロサービスである。
+マイクロサービスを跨いだ、トランザクション処理が発生しないように分割する。例えば、簡易ECサイトの場合だと、Goods Serivceのトランザクション
+はAccount Serviceが持つデータを更新しないようにする（逆方向も同様）。
+    
+.. figure:: ../img/overview.png
+   :scale: 40%
+   :align: center
+   :alt: 
+   
+   全体イメージ（モノリシック vs マイクロサービス）
+
+
+各サービスの主な業務機能
+^^^^^^^^^^^^^^^
+
+.. csv-table::
+    :header: サービス, 機能, 内容, 備考
+    :widths: 5, 20, 20, 20
+
+    Order, 商品注文, カートに入った商品の購入手続きを行う, 注文確定処理時に、商品の在庫確認と購入者の購入額上限をチェック
+    Goods, 商品取得, 指定した商品IDに一致する商品を取得する, --
+    Goods, 商品カテゴリ取得, 指定した商品カテゴリに一致する商品を取得する, --
+    Goods, 商品情報更新, 商品情報（商品詳細、在庫情報等）を更新する, 商品情報更新時、在庫がマイナスでないかチェック
+    Account, アカウント取得, 指定したEmailアドレスやIDに一致するアカウントを取得する, --
+    Account, アカウント情報更新, アカウント情報（ユーザ基本情報、累積購入額、購入額上限等）を更新する, アカウント情報更新時、累積購入額が購入額上限を上回らないかチェック
+
+    
+        
+
+各サービスの主なシステム機能
+^^^^^^^^^^^^^^^
+
+.. csv-table::
+    :header: サービス, 機能, 内容
+    :widths: 5, 20, 20
+
+    Order,認証・認可, Accountサービスが保持するアカウント情報とSpring Securityをつかって認証・認可機能を提供する
+    Order,分散トランザクション管理, 商品注文機能が扱う、GoodsとAccountが保持するデータの整合性担保のため、Sagaを使った分散トランザクション管理を行う
+    Goods, RET APIサービス, 業務機能をREST APIで提供する
+    Account, REST APIサービス, 業務機能をREST APIで提供する
+
+
+
+システム全体構成（ヘキサゴナルアーキテクチャ）
+^^^^^^^^^^^^^^^
+
+
+.. figure:: ../img/hexArchitecture.png
+   :scale: 40%
+   :align: center
+   :alt: 
+   
+   システム全体構成（ヘキサゴナルアーキテクチャ）
+
+.. note::
+
+   ヘキサゴナルアーキテクチャでは、内側の中央の六角形はBusiness logicを表し、外側の六角形は外部とのAdapterを表す。
+   ポイントは、Business logicは、外側のAdapterには依存しないということ。
+   
+参考: Microservice Patterns, Chris Richardson
+
+Goods ServiceのREST APIの設計と実装
+^^^^^^^^^^^^^^^
+
+**API一覧**
+
+.. csv-table::
+    :header: 機能, method, Query Parameter, Request Body, Response Body, Status Code 
+    :widths: 5, 20, 20,20,20,20
+
+    カテゴリIDによる商品一覧取得 ,get ,categoryId/offset/limit, --,  GoodsResource[], 200/400
+    商品IDによる商品詳細取得 ,get, goodsId, --,  GoodsResource, 200/400
+    商品情報更新, put, goodsId, Goods, Goods[] ,200/400
+
+**実装概要**
+
+MVCアプリケーションと比べた場合、REST APIサービスでは、以下の特徴がある。
+Serviceクラス以下のクラスについては、Webアプリケーションと同様の実装となるため、
+元々の簡易ECサイトのソースコードをそのまま使っている。
+一方、Controllerクラスにおいて、MVCアプリケーションでは、画面からの入力をFormクラスで受け取り、Viewを返すが、
+REST APIサービスでは、クエリパラメータ等でREST Clietからの入力を受け取り、Resourceオブジェクトを返す。
+
+
+**Contorollerクラス**
+
+以下は「カテゴリIDによる商品一覧取得」のAPIに対応するContorollerクラスの抜粋である。@RequestParamで受け取ったクエリパラーメータの値を、Serviceクラスに渡し
+ModelクラスのGoodsのListを受け取っている。それを、Mapperを使ってResourceクラスに変換している。
+なお、以下のAPIは、offsetとlimitの指定で、指定したカテゴリIDに一致したGoodsの一部を返却しているが、
+総件数については、レスポンスヘッダーに入れている。
+また、BusinessExceptionは、throwsし例外ハンドラに例外処理は、委譲している。
+
+.. sourcecode:: bash                
+        :linenos:
+
+        //omitted
+
+        @RestController
+        @RequestMapping("api/v1")
+        public class GoodsRestController {
+
+        @Autowired
+        GoodsService goodsService;
+
+        @Autowired
+        Mapper beanMapper;
+
+        @GetMapping("/goods")
+        public ResponseEntity<List<Goods>> getGoodsByCategoryId(@RequestParam(name = "categoryId", defaultValue = "1") Integer categoryId,
+                                                                @RequestParam(name = "offset", required = false, defaultValue = "0") Integer offset,
+                                                                @RequestParam(name = "limit", required = false, defaultValue = "10") Integer limit) throws BusinessException {
+
+            List<Goods> goodsList = goodsService.findByCategoryId(categoryId, offset, limit);
+            List<GoodsResource> goodsResourcesList = new ArrayList<>();
+            for (Goods goods : goodsList) {
+                goodsResourcesList.add(beanMapper.map(goods, GoodsResource.class));
+            }
+
+            HttpHeaders headers = new HttpHeaders();
+            Long total = goodsService.getTotalWithCategoryId(categoryId);
+            headers.add("X-Total-Count", String.valueOf(total));
+
+            return new ResponseEntity<>(
+                    goodsList,
+                    headers,
+                    HttpStatus.OK);
+
+        }
+
+        //omitted
+
+**Resourceクラス**
+
+MVCアプリケーションには存在しないREST APIサービス特有のクラスである。
+サービス内部の業務ロジックで用いるドメインオブジェクトと、サービス外部提向けに提供する際の、情報は異る可能性を考慮し、
+Modelクラスとは別に、Resourceクラスを用意する。
+
+.. sourcecode:: bash                
+        :linenos:
+
+        //omitted
+
+        @AllArgsConstructor
+        @NoArgsConstructor
+        @Builder
+        @Data
+        public class GoodsResource implements Serializable {
+
+            private static final long serialVersionUID = 1L;
+
+            private String id;
+
+            private String name;
+
+            private String description;
+
+            private int categoryId;
+
+            private int price;
+
+            private int stock;
+
+        }
+
+
+**Modelクラス**
+
+.. sourcecode:: bash                
+        :linenos:
+
+        //omitted
+
+        @AllArgsConstructor
+        @NoArgsConstructor
+        @Builder
+        @Data
+        public class Goods implements Serializable {
+
+            private static final long serialVersionUID = 1L;
+
+            private String id;
+
+            private String name;
+
+            private String description;
+
+            private int categoryId;
+
+            private int price;
+
+            private int stock;
+
+            @Override
+            public boolean equals(Object obj) {
+
+                if (!(obj instanceof Goods)) {
+                    return false;
+                }
+
+                return id.equals(((Goods) obj).getId());
+            }
+
+            @Override
+            public int hashCode() {
+                return id.hashCode();
+            }
+
+        }
+
+**Serivceクラス**
+
+以下は商品情報更新処理のServiceクラスのメソッドである。REST Clientから送られたきた商品のStockが、0を下回るとき、
+ビジネス例外をthrowする。そうでない場合は、Repositoryクラスを呼び、データを永続化する。
+
+.. sourcecode:: bash                
+        :linenos:
+
+        //omitted
+
+        @Service
+        public class GoodsService {
+
+        @Autowired
+        MessageSource messageSource;
+
+        @Autowired
+        GoodsRepository goodsRepository;
+        
+        //omitted
+        
+        public void update(Goods goods) throws BusinessException{
+        if (goods.getStock() < 0){
+            String errorCode = "BE0003";
+            throw new BusinessException(errorCode, messageSource.getMessage(
+                    errorCode, new String []{goods.getName()}, Locale.getDefault()));
+        }else{
+            goodsRepository.updateById(goods);
+        }
+    }
+
+**Repositoryクラス**
+
+MyBatis3を使った、Repositoryクラスの実装である。
+
+.. sourcecode:: bash                
+        :linenos:
+
+        //omitted
+
+        @Repository
+        @Mapper
+        public interface GoodsRepository {
+
+            List<Goods> findPageByCategoryId(Integer categoryId, RowBounds rowBounds);
+
+            Goods findById(String id);
+
+            List<Integer> getAllCategories();
+
+            long countByCategoryId(int categoryId);
+
+            boolean updateById(Goods goods);
+        }
+
+
+**MyBatisマッピングファイル**
+
+Modelクラスのオブジェクトを返り値として受け取りたい場合は、
+resultMapで、オブジェクトフィールド名とテーブルのカラム名を対応づける。
+
+.. sourcecode:: bash                
+        :linenos:
+
+        <?xml version="1.0" encoding="UTF-8"?>
+        <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+                "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        <mapper namespace="com.example.good.domain.repository.GoodsRepository">
+
+            <resultMap id="goodsResultMap" type="com.example.good.domain.model.Goods">
+                <id property="id" column="goods_id" />
+                <result property="name" column="goods_name" />
+                <result property="description" column="description" />
+                <result property="categoryId" column="category_id" />
+                <result property="price" column="price" />
+                <result property="stock" column="stock" />
+            </resultMap>
+
+            <select id="findPageByCategoryId" parameterType="int" resultMap="goodsResultMap">
+                <![CDATA[
+                SELECT
+                    goods_id,
+                    goods_name,
+                    description,
+                    category_id,
+                    price,
+                    stock
+                FROM
+                    goods
+                WHERE
+                    category_id = #{categoryId}
+                ORDER BY
+                    goods_id
+                ]]>
+            </select>
+
+        //omitted
+
+
+**例外ハンドリングクラス**
+
+以下は、Contorollerクラスで発生する例外のハンドリングクラスである。@ControllerAdviceのアノテーションによって、
+Contorollerクラス内の各メソッドで発生する例外を横断してハンドリングできる。
+以下は、ビジネス例外をハンドリングするメソッドの例である。Serviceクラスの実装サンプルで示したように、
+エラーコード、エラーメッセージが格納されているbusinessExceptionをbodyに埋め込み、400エラー（BAD REQUEST）を
+REST CLIENTに返している。
+
+.. sourcecode:: bash                
+        :linenos:
+
+        //omitted
+
+        @ControllerAdvice
+        public class CommonExceptionHandler {
+
+            @Autowired
+            Mapper beanMapper;
+
+            @ExceptionHandler(BusinessException.class)
+            public ResponseEntity<Object> handleBusinessException(BusinessException businessException){
+                return new ResponseEntity<>(
+                        beanMapper.map(businessException, BusinessExceptionResponse.class),
+                        HttpStatus.BAD_REQUEST);
+
+            }
+        
+        //omitted
+
+
+Account SerivceのREST APIの設計と実装
+^^^^^^^^^^^^^^^^^^^^^
+
+**API一覧**
+
+.. csv-table::
+    :header: 機能, method, Query Parameter, Request Body, Response Body, Status Code 
+    :widths: 5, 20, 20,20,20,20
+
+    アカウントIDによるアカウント取得 ,get ,id, --,  AccountResource, 200/400
+    Emailによるアカウント取得, post, --, LoginId, AccountResource, 200/400
+    アカウント作成, post, --, AccountCreateResource, ※locationヘッダーに、作成したアカウントのURIを付与 ,200/400
+    アカウント更新, put, --, AccountUpdateResource, -- ,204/400
+
+**Contorollerクラス**
+
+以下は「アカウント更新」のAPIに対応するContorollerクラスの実装である。
+Goods Seriviceとの実装上の違いは、リクエストボディの引数に、@Validatedを付けて、バリデーション処理を行っている。
+バリデーション例外が発生した場合は、例外ハンドラクラスで、ハンドリングを行う。
+
+.. sourcecode:: bash                
+        :linenos:
+
+        //omitted
+
+        @PutMapping("/account")
+        @ResponseStatus(HttpStatus.NO_CONTENT)
+        public void updateAccount(@RequestParam(name = "id") String id,
+                                @Validated @RequestBody AccountUpdateResource accountUpdateResource) throws BusinessException{
+            Account account = beanMapper.map(accountUpdateResource, Account.class);
+            account.setId(id);
+            accountService.update(account);
+        }
+
+        //omitted
+
+
+**Resourceクラス**
+
+.. sourcecode:: bash                
+        :linenos:
+
+        //omitted
+
+        public class AccountUpdateResource implements  Serializable{
+            private static final long serialVersionUID = 1L;
+
+            private String id;
+
+            @NotNull
+            @Size(min = 1, max = 255)
+            private String name;
+
+        //omitted
+
+**Serivceクラス**
+
+以下は、アカウント更新処理メソッドの実装である。REST CLIENTから累計購入金額が購入額上限を上回った場合、
+ビジネス例外をthrowする。そうでない場合は、Repositoryクラスを呼び、データを永続化する。
+
+.. sourcecode:: bash
+        :linenos:
+
+        //omitted
+
+        public void update(Account account) throws BusinessException {
+            if (parseInt(account.getCreditCharge()) > parseInt(account.getCreditLimit())){
+                String errorCode = "BE0003";
+                throw new BusinessException(errorCode, messageSource.getMessage(
+                        errorCode, new String[]{account.getCreditCharge(), account.getCreditLimit()}, Locale.getDefault()));
+
+            }else{
+                accountRepository.updateById(account);
+            }
+        }
+
+**例外ハンドリングクラス**
+
+
+Order SerivceのSaga Transactionの設計と実装
+^^^^^^^^^^^^^^^
+
+商品注文処理を、Goods ServiceとAccount Serviceを呼び出して実現する。
+ポイントは、Goods Serviceもしくは、Account Serviceで例外が発生した際に、
+適切に補償トランザクションを実行しデータの整合性を保つことである。
+
+
+**Sagaにおける補償トランザクション**
+
+補償トランザクションとは、フォーワードトランザクション実行で失敗が発生した際、
+失敗以前に行った変更を、打ち消すトランザクションである。
+例えば、以下の例では、フォーワードトランザクションTn+1が失敗した場合、補償トランザクションCnからC1を実行している。
+
+.. figure:: ../img/conpensatingTransaction.png
+   :scale: 40%
+   :align: center
+   :alt: 
+   
+   補償トランザクションの実行イメージ
+
+引用: Microservice Patterns, Chris Richardson
+
+.. note::
+
+   補償トランザクションは、フォーワードトランザクションと逆順で実行する点に注意する。
+
+
+**フォーワードトランザクションと補償トランザクションの一覧**
+
+    .. csv-table::
+        :header: Step, Service, Forward Transaction, Compensating Transaction
+        :widths: 5, 10, 10, 10
+
+        1, Order Service, createOrder(), rejectOrder()
+        2, Order Service, createOrderLines(), deleteOrderLines()
+        3, Goods Service, decreaseStock(), increaeStok()
+        4, Account Service, addCreditCharge(), substractCreditCharge()
+        5, Order Service, approveOrdre(), --
+
+
+**実装概要**
+
+Order ServiceのServiceクラスから、Sagaの実行に必要な情報をSagaStateクラスに格納した後、
+SagaManagerクラスから実行。Sagaの定義（各STEPのトランザクションの定義とSTEPの順序の定義）は、
+SagaPaticipantクラスとSagaDefinitionクラスを使ってDIする。
+
+.. figure:: ../img/sagaSequence.png
+   :scale: 40%
+   :align: center
+   :alt: 
+   
+   処理シーケンスイメージ
+
+**SagaPaticipantクラス**
+
+以下の、フォーワードトランザクションと、補償トランザクションのメソッドの組み合わせを、
+インタフェース定義している。ビジネス例外をthrowし、SagaParticipantを実行するSagaManagerで例外ハンドリングできるようにする。
+
+.. sourcecode:: bash
+        :linenos:
+
+        //omitted
+
+        public interface SagaParticipant {
+            void forwardTransaction(CreateOrderSagaState createOrderSagaState) throws BusinessException;
+            void compensatingTransaction(CreateOrderSagaState createOrderSagaState) throws BusinessException;
+        }
+
+
+Sagaトランザクションの各STEPは、自身が行いたい処理を実装する。
+以下は、商品注文時、商品在庫を減らす処理をフォーワードトランザクションとして定義し、
+商品在庫を増やす処理を補償トランザクションで定義している。
+
+.. sourcecode:: bash
+        :linenos:
+
+        //omitted
+
+        @Component("goodsServiceParticipant")
+        public class GoodsServiceParticipant implements SagaParticipant {
+
+            @Autowired
+            GoodsService goodsService;
+
+            @Override
+            public void forwardTransaction(CreateOrderSagaState createOrderSagaState) throws BusinessException {
+                for (OrderLine orderLine : createOrderSagaState.getOrderLines()) {
+                    goodsService.decreaseStock(orderLine.getGoods(), orderLine.getQuantity());
+                }
+            }
+
+            @Override
+            public void compensatingTransaction(CreateOrderSagaState createOrderSagaState) throws BusinessException{
+                for (OrderLine orderLine : createOrderSagaState.getOrderLines()) {
+                    goodsService.increaseStock(orderLine.getGoods(), orderLine.getQuantity());
+                }
+            }
+        }
+
+
+**SagaDefinitionクラス**
+
+各SagaPaticipantクラスを組み合わせて、Sagaの定義を行う。
+以下では、各SagaPaticipantの実装クラスを引数にして、List<SagaParticipant>型でSagaを定義している。
+DIしておき、Sagaを実際に実行する、SagaManagerクラスから使えるようにしておく。
+
+
+.. sourcecode:: bash
+        :linenos:
+
+        //omitted
+
+        @Configuration
+        public class SagaConfig {
+
+            @Bean
+            public CreateOrderSaga createOrderSaga(OrderServiceParticipant orderServiceParticipant,
+                                                GoodsServiceParticipant goodsServiceParticipant,
+                                                AccountServiceParticipant accountServiceParticipant){
+                CreateOrderSaga createOrderSaga = new CreateOrderSaga();
+                List<SagaParticipant> sagaDefinition = new ArrayList<>();
+                sagaDefinition.add(orderServiceParticipant);
+                sagaDefinition.add(goodsServiceParticipant);
+                sagaDefinition.add(accountServiceParticipant);
+                createOrderSaga.setSagaDefinition(sagaDefinition);
+                return createOrderSaga;
+            }
+        }
+
+
+**SagaStateクラス**
+
+Sagaの実行時に必要な状態を保持するクラス。以下は、商品注文処理に必要な、
+注文商品情報やアカウント情報を保持している。
+
+.. sourcecode:: bash
+        :linenos:
+
+        //omitted
+
+        @Data
+        @Component
+        public class CreateOrderSagaState extends SagaState{
+            private Order order;
+            private List<OrderLine> orderLines;
+            private Account account;
+
+
+            public CreateOrderSagaState(Order order, List<OrderLine> orderLines, Account account){
+                super();
+                this.order = order;
+                this.orderLines = orderLines;
+                this.account = account;
+
+            }
+        }
+
+
+**SagaManagerクラス**
+
+Sagaの定義と状態を使って、実際にSagaを実行するクラス。
+各Stepの実行事に発生するビジネス例外をキャッチした場合は、完了済のSTEPの補償トランザクションを
+逆順に実行していく。補償トランザクションを実行した場合は、ビジネス例外をthrowし、Controllerクラスで例外ハンドリングし
+ユーザに注文完了できないことを通知する。
+
+.. sourcecode:: bash
+        :linenos:
+
+        //omitted
+
+        @Component
+        public class CreateOrderSagaManager {
+
+            @Autowired
+            MessageSource messageSource;
+
+
+            @Autowired
+            CreateOrderSaga createOrderSaga;
+
+            public void create (CreateOrderSagaState createOrderSagaState) throws BusinessException{
+                List<SagaParticipant> sagaDefinition = createOrderSaga.getSagaDefinition();
+                Deque<SagaParticipant> sagaParticipantDoneList = new ArrayDeque<>();
+
+                for (SagaParticipant sagaParticipant : sagaDefinition){
+                    try{
+                        sagaParticipant.forwardTransaction(createOrderSagaState);
+                        sagaParticipantDoneList.push(sagaParticipant);
+
+                    }catch (BusinessException e){
+                        sagaParticipantDoneList.pop().compensatingTransaction(createOrderSagaState);
+                        throw e;
+                    }
+
+                }
+            }
+        }
+
+
+
+
+

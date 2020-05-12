@@ -36,7 +36,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="索引" href="genindex.html" />
     <link rel="search" title="検索" href="search.html" />
-    <link rel="next" title="MyBatis3" href="MyBatis3.html" />
+    <link rel="next" title="Spring Web" href="Spring-Web.html" />
     <link rel="prev" title="Spring Security" href="Spring-Security.html" /> 
 </head>
 
@@ -83,18 +83,25 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Spring-Core.html">Spring Core</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Spring-Boot.html">Spring Boot</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Spring-Session.html">Spring Session</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Spring-Security.html">Spring Security</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Spring MVC</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#id1">内容</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">例外ハンドリング</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#validation-error">Validation Error</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="Spring-Web.html">Spring Web</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Spring-Data.html">Spring Data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="MyBatis3.html">MyBatis3</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Spring-to-Spring-boot.html">SpringからSpring bootへの移行</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Docker.html">Docker</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Microservice.html">Microservice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="WebAPI.html">Web API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="git.html">git</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Lombok.html">Lombok</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Linux.html">Linux</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
@@ -168,8 +175,51 @@
   <div class="section" id="spring-mvc">
 <h1>Spring MVC<a class="headerlink" href="#spring-mvc" title="このヘッドラインへのパーマリンク">¶</a></h1>
 <div class="section" id="id1">
-<h2>内容<a class="headerlink" href="#id1" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>ああああああ</p>
+<h2>例外ハンドリング<a class="headerlink" href="#id1" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<ul class="simple">
+<li>システム例外（System Exception）</li>
+</ul>
+<blockquote>
+<div>利用者には、システムエラー画面を提示。</div></blockquote>
+<ul class="simple">
+<li>リクエスト不正（Validation Eroor）</li>
+</ul>
+<blockquote>
+<div>利用者には、リクエスト内容が間違っていることを通知</div></blockquote>
+<ul class="simple">
+<li>アプリケーション例外（Business Exception）</li>
+</ul>
+<p>ビジネスルールに反している例外。IDの重複エラーなど。</p>
+</div>
+<div class="section" id="validation-error">
+<h2>Validation Error<a class="headerlink" href="#validation-error" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<ul class="simple">
+<li>リクエストパラメータのValidation</li>
+</ul>
+<p>コントローラクラスの各マッピングメソッドにおいて、
+HTMLフォームとのバインディング用のフォームラスや、REST APIにおけるリソースクラスの引数に、
+&#64;Vlalidatedを指定する。</p>
+<ul class="simple">
+<li>相関項目チェック</li>
+</ul>
+<blockquote>
+<div><p>initBinderメソッドは、&#64;Validatedがついた全てのパラメータに対して呼ばれてしまう。
+そのためコントローラ内に、複数の型のパラメータが存在する場合、
+相関チェック定義クラス（Validatorインタフェースの実装クラス）で指定した以外のクラスには、
+IllegalStateException: Invalid target for Validator のエラーが発生する。</p>
+<p>回避するためには、以下のように、&#64;InitBinderのvalue属性に、適用したいクラス名を指定する。</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><span></span> @InitBinder<span class="o">(</span><span class="nv">value</span> <span class="o">=</span> <span class="s2">&quot;accountUpdateResource&quot;</span><span class="o">)</span>
+ public void initBinder<span class="o">(</span>WebDataBinder binder<span class="o">)</span> <span class="o">{</span>
+     binder.addValidators<span class="o">(</span>creditChargeValidator<span class="o">)</span><span class="p">;</span>
+ <span class="o">}</span>
+</pre></div>
+</td></tr></table></div>
+</div></blockquote>
+</div></blockquote>
 </div>
 </div>
 
@@ -181,7 +231,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="MyBatis3.html" class="btn btn-neutral float-right" title="MyBatis3" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="Spring-Web.html" class="btn btn-neutral float-right" title="Spring Web" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="Spring-Security.html" class="btn btn-neutral float-left" title="Spring Security" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

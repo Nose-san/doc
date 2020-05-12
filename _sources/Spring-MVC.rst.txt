@@ -2,7 +2,40 @@
 Spring MVC
 =========================
 
-内容
+例外ハンドリング
 ====
 
-ああああああ
+* システム例外（System Exception）
+ 利用者には、システムエラー画面を提示。
+
+
+* リクエスト不正（Validation Eroor）
+ 利用者には、リクエスト内容が間違っていることを通知
+
+
+* アプリケーション例外（Business Exception）
+ビジネスルールに反している例外。IDの重複エラーなど。
+
+Validation Error
+====
+
+* リクエストパラメータのValidation
+コントローラクラスの各マッピングメソッドにおいて、
+HTMLフォームとのバインディング用のフォームラスや、REST APIにおけるリソースクラスの引数に、
+@Vlalidatedを指定する。
+
+* 相関項目チェック
+ initBinderメソッドは、@Validatedがついた全てのパラメータに対して呼ばれてしまう。
+ そのためコントローラ内に、複数の型のパラメータが存在する場合、
+ 相関チェック定義クラス（Validatorインタフェースの実装クラス）で指定した以外のクラスには、
+ IllegalStateException: Invalid target for Validator のエラーが発生する。
+
+ 回避するためには、以下のように、@InitBinderのvalue属性に、適用したいクラス名を指定する。
+
+          .. sourcecode:: bash                
+           :linenos:
+
+            @InitBinder(value = "accountUpdateResource")
+            public void initBinder(WebDataBinder binder) {
+                binder.addValidators(creditChargeValidator);
+            }

@@ -36,8 +36,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="索引" href="genindex.html" />
     <link rel="search" title="検索" href="search.html" />
-    <link rel="next" title="UX" href="UX.html" />
-    <link rel="prev" title="Microservice" href="Microservice.html" /> 
+    <link rel="next" title="Web API" href="Lombok.html" />
+    <link rel="prev" title="Web API" href="WebAPI.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -91,10 +91,14 @@
 <li class="toctree-l1"><a class="reference internal" href="Spring-to-Spring-boot.html">SpringからSpring bootへの移行</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Docker.html">Docker</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Microservice.html">Microservice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="WebAPI.html">Web API</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">git</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#id1">内容</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">リポジトリを作成してからプッシュするまでの流れ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">ローカルリポジトリを削除する方法</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="Lombok.html">Web API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Linux.html">Linux</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
@@ -168,8 +172,92 @@
   <div class="section" id="git">
 <h1>git<a class="headerlink" href="#git" title="このヘッドラインへのパーマリンク">¶</a></h1>
 <div class="section" id="id1">
-<h2>内容<a class="headerlink" href="#id1" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>ああああああ</p>
+<h2>リポジトリを作成してからプッシュするまでの流れ<a class="headerlink" href="#id1" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<ol class="arabic">
+<li><p class="first">Github上でリポジトリを作成（例：doc）</p>
+</li>
+<li><p class="first">作成したリポジトリをクローン</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>git clone https://github.com/Nose-san/doc.git
+</pre></div>
+</td></tr></table></div>
+</div></blockquote>
+</li>
+<li><p class="first">ブランチを作成（ブランチを切る）</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span></span> <span class="nb">cd</span> doc
+ git branch master
+ git branch gh-pages
+</pre></div>
+</td></tr></table></div>
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p class="last">gh-pagesブランチは、github pagesで必要なブランチ</p>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">ブランチの切り替え（チェックアウト）</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>git checkout gh-pages
+</pre></div>
+</td></tr></table></div>
+</div></blockquote>
+</li>
+<li><p class="first">開発</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>クローンによって作成されフォルダ配下に、管理したい資材をコピー</li>
+<li>資材の修正、新規作成</li>
+</ol>
+</div></blockquote>
+</li>
+<li><p class="first">コミットしたい資材の選択</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># ディレクトリ単位で指定したい場合の例</span>
+git add .
+</pre></div>
+</td></tr></table></div>
+</div></blockquote>
+</li>
+<li><p class="first">資材のコミット</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>git commit
+</pre></div>
+</td></tr></table></div>
+</div></blockquote>
+</li>
+<li><p class="first">資材のプッシュ</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>git push origin gh-pages
+</pre></div>
+</td></tr></table></div>
+</div></blockquote>
+</li>
+</ol>
+</div>
+<div class="section" id="id2">
+<h2>ローカルリポジトリを削除する方法<a class="headerlink" href="#id2" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>資材をgit管理対象から外したいときに行う。</p>
+<ol class="arabic">
+<li><p class="first">リポジトリのルートディレクトリに移動し、.gitディレクトリを削除</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># docディレクトリがリポジトリのルートである場合</span>
+<span class="nb">cd</span> doc
+
+<span class="c1"># rf オプションを付けて、確認メッセージを出さずに、ディレクトリ内を再帰的に削除</span>
+rm -rf .git
+</pre></div>
+</td></tr></table></div>
+</div></blockquote>
+</li>
+</ol>
 </div>
 </div>
 
@@ -181,10 +269,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="UX.html" class="btn btn-neutral float-right" title="UX" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="Lombok.html" class="btn btn-neutral float-right" title="Web API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="Microservice.html" class="btn btn-neutral float-left" title="Microservice" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="WebAPI.html" class="btn btn-neutral float-left" title="Web API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

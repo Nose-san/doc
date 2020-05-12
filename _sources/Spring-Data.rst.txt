@@ -1,0 +1,66 @@
+Spring Data
+=========================
+
+Pageable
+--------------
+
+* Configuration
+
+    * Spring
+
+    以下のように、spring-mvc.xmlに定義する。fallbackPageableプロパティは、デフォルト値の設定であり、
+    page属性に0、size属性に3を設定している。
+
+    .. sourcecode:: bash                
+        :linenos:
+
+        <mvc:annotation-driven>
+            <mvc:argument-resolvers>
+                <bean
+                        class="org.springframework.data.web.PageableHandlerMethodArgumentResolver" >
+                    <property name="fallbackPageable">
+                        <bean class="org.springframework.data.domain.PageRequest">
+                            <constructor-arg index="0" value="0" />
+                            <constructor-arg index="1" value="3" />
+                        </bean>
+                    </property>
+                </bean>
+            </mvc:argument-resolvers>
+        </mvc:annotation-driven>
+
+
+    * Spring boot
+
+    以下のように、@Configurationを付与したクラスに設定していき、WebMvcConfigurerを実装し、Spring MVCの
+    設定を行う。
+
+    .. sourcecode:: bash                
+        :linenos:
+
+            mport org.springframework.context.annotation.Configuration;
+            import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
+            import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+            import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+            @Configuration
+            public class MyAppWebConfig implements WebMvcConfigurer {
+
+                @Override
+                public void addArgumentResolvers(
+                        List<HandlerMethodArgumentResolver> argumentResolvers) {
+                    PageableHandlerMethodArgumentResolver resolver = new PageableHandlerMethodArgumentResolver();
+                    // 1ページに表示する最大件数を10件に
+                    resolver.setMaxPageSize(10);
+                    argumentResolvers.add(resolver);
+    }
+}
+* Repository
+
+
+* Serivce
+
+
+* Controller
+
+
+* View

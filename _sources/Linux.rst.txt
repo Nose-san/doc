@@ -1,0 +1,21 @@
+Linux
+=========================
+
+コマンド
+--------------
+
+* 特定のポート番号を使用するプロセスIDの確認
+
+    .. sourcecode:: bash
+     :linenos:
+
+     # 8080ポートの場合
+     lsof -i :8080
+
+* Ctl + Cと同等のkillコマンド
+
+    .. sourcecode:: bash
+     :linenos:
+
+     # PID 4000の場合
+     kill -2 4080

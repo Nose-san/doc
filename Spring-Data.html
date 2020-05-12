@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>SpringからSpring bootへの移行 &mdash; test_sphinx 1.0.0 ドキュメント</title>
+  <title>Spring Data &mdash; test_sphinx 1.0.0 ドキュメント</title>
   
 
   
@@ -35,9 +35,7 @@
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="索引" href="genindex.html" />
-    <link rel="search" title="検索" href="search.html" />
-    <link rel="next" title="Docker" href="Docker.html" />
-    <link rel="prev" title="MyBatis3" href="MyBatis3.html" /> 
+    <link rel="search" title="検索" href="search.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -82,19 +80,15 @@
             
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="Spring-Core.html">Spring Core</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Spring-Boot.html">Spring Boot</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Spring-Session.html">Spring Session</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Spring-Security.html">Spring Security</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Spring-MVC.html">Spring MVC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Spring-Web.html">Spring Web</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Spring-Data.html">Spring Data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="MyBatis3.html">MyBatis3</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">SpringからSpring bootへの移行</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#id1">1</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="Spring-to-Spring-boot.html">SpringからSpring bootへの移行</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Docker.html">Docker</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Microservice.html">Microservice</a></li>
 <li class="toctree-l1"><a class="reference internal" href="WebAPI.html">Web API</a></li>
@@ -152,13 +146,13 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>SpringからSpring bootへの移行</li>
+      <li>Spring Data</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/Spring-to-Spring-boot.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/Spring-Data.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -171,10 +165,92 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="springspring-boot">
-<h1>SpringからSpring bootへの移行<a class="headerlink" href="#springspring-boot" title="このヘッドラインへのパーマリンク">¶</a></h1>
-<div class="section" id="id1">
-<h2>1<a class="headerlink" href="#id1" title="このヘッドラインへのパーマリンク">¶</a></h2>
+  <div class="section" id="spring-data">
+<h1>Spring Data<a class="headerlink" href="#spring-data" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<div class="section" id="pageable">
+<h2>Pageable<a class="headerlink" href="#pageable" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<ul>
+<li><p class="first">Configuration</p>
+<blockquote>
+<div><ul class="simple">
+<li>Spring</li>
+</ul>
+<p>以下のように、spring-mvc.xmlに定義する。fallbackPageableプロパティは、デフォルト値の設定であり、
+page属性に0、size属性に3を設定している。</p>
+<div class="highlight-bash notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13</pre></div></td><td class="code"><div class="highlight"><pre><span></span>&lt;mvc:annotation-driven&gt;
+    &lt;mvc:argument-resolvers&gt;
+        &lt;bean
+                <span class="nv">class</span><span class="o">=</span><span class="s2">&quot;org.springframework.data.web.PageableHandlerMethodArgumentResolver&quot;</span> &gt;
+            &lt;property <span class="nv">name</span><span class="o">=</span><span class="s2">&quot;fallbackPageable&quot;</span>&gt;
+                &lt;bean <span class="nv">class</span><span class="o">=</span><span class="s2">&quot;org.springframework.data.domain.PageRequest&quot;</span>&gt;
+                    &lt;constructor-arg <span class="nv">index</span><span class="o">=</span><span class="s2">&quot;0&quot;</span> <span class="nv">value</span><span class="o">=</span><span class="s2">&quot;0&quot;</span> /&gt;
+                    &lt;constructor-arg <span class="nv">index</span><span class="o">=</span><span class="s2">&quot;1&quot;</span> <span class="nv">value</span><span class="o">=</span><span class="s2">&quot;3&quot;</span> /&gt;
+                &lt;/bean&gt;
+            &lt;/property&gt;
+        &lt;/bean&gt;
+    &lt;/mvc:argument-resolvers&gt;
+&lt;/mvc:annotation-driven&gt;
+</pre></div>
+</td></tr></table></div>
+<ul class="simple">
+<li>Spring boot</li>
+</ul>
+<p>以下のように、&#64;Configurationを付与したクラスに設定していき、WebMvcConfigurerを実装し、Spring MVCの
+設定を行う。</p>
+<div class="highlight-bash notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15</pre></div></td><td class="code"><div class="highlight"><pre><span></span>    mport org.springframework.context.annotation.Configuration<span class="p">;</span>
+    import org.springframework.data.web.PageableHandlerMethodArgumentResolver<span class="p">;</span>
+    import org.springframework.web.method.support.HandlerMethodArgumentResolver<span class="p">;</span>
+    import org.springframework.web.servlet.config.annotation.WebMvcConfigurer<span class="p">;</span>
+
+    @Configuration
+    public class MyAppWebConfig implements WebMvcConfigurer <span class="o">{</span>
+
+        @Override
+        public void addArgumentResolvers<span class="o">(</span>
+                List&lt;HandlerMethodArgumentResolver&gt; argumentResolvers<span class="o">)</span> <span class="o">{</span>
+            PageableHandlerMethodArgumentResolver <span class="nv">resolver</span> <span class="o">=</span> new PageableHandlerMethodArgumentResolver<span class="o">()</span><span class="p">;</span>
+            // <span class="m">1</span>ページに表示する最大件数を10件に
+            resolver.setMaxPageSize<span class="o">(</span><span class="m">10</span><span class="o">)</span><span class="p">;</span>
+            argumentResolvers.add<span class="o">(</span>resolver<span class="o">)</span><span class="p">;</span>
+</pre></div>
+</td></tr></table></div>
+<p>}</p>
+</div></blockquote>
+</li>
+</ul>
+<p>}
+* Repository</p>
+<ul class="simple">
+<li>Serivce</li>
+<li>Controller</li>
+<li>View</li>
+</ul>
 </div>
 </div>
 
@@ -183,15 +259,6 @@
            
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="Docker.html" class="btn btn-neutral float-right" title="Docker" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="MyBatis3.html" class="btn btn-neutral float-left" title="MyBatis3" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>

@@ -1,0 +1,92 @@
+Web API
+=========================
+
+URI設計
+--------------
+以下のような命名規則が考えられる。
+
+    /*サービス名*/api/*バージョン*/*リソース名*
+
+例えば、サービス名が/backend/goods/、バージョンがv1、リソース名がgoodsの場合、以下のようになる。
+
+    /backend/goods/api/v1/goods
+
+
+ページネーション
+--------------
+
+たくさんあるデータの一部を取得する際、パラメータで取得数と取得位置の指定が必要。SQLのSELC文で
+limitとoffsetに該当。以下のような指定方法が一般的。
+
+    * per_page=50&page=3
+    * limit=50&offset=100
+
+提供するAPIとしては、limit（取得数）とoffset（取得位置）の方が自由度が高いと考えるので、そちらを採用し、
+BFF側で、Viewから渡されてくるPageableオブジェクトを使ってオフセットを算出し、API呼び出す実装とする。
+具体的には、pageable.getPageSize()でlimit、pageable.getOffset()でoffsetを取得する。
+
+例外ハンドリング
+--------------
+
+* 設計
+    * プロジェクト設計
+
+        * 各サービスのプロジェクトとは別に、commonプロジェクトを作成する。
+          但し、現状、multi moule構成を組めず、domainやappパッケージど同階層に
+          apinfra.exeptionのパケージを作成した。
+    
+    * 例外種別
+
+        * ビジネス例外
+          システム的には問題無いが、業務的に問題のある例外。
+          例えば、商品検索APIで該当しない商品IDを指定した場合、Repository層のクラスからは、
+          Nullが正常に返ってくるが、業務的に問題がある場合は、Service層でビジネス例外を、throwする。
+
+
+        * システム例外
+
+* 実装
+
+    * 例外ハンドラクラスの実装
+     @ExceptionHandlerを付与したメソッドで、各例外クラスに応じた処理を実装する。
+     例外クラスから、例外レスポンスへの変換も行う。
+     ResponseEntity<>のジェネリクスに、例外レスポンスの型を指定して返却する。
+     ResponseEntity<>のインスタンス作成方法は、以下の2パターンある。
+      
+        * ResponseEntityExceptionHandlerを継承し、handleExceptionInternalメソッドを読み出し作成
+         bodyとHTTP Statusを指定する場合は、以下のように実装する。
+         
+
+
+        * ResponseEntityのコンストラクタで生成。
+         bodyとHTTP Statusを指定する場合は、以下のように実装する。
+
+         ResponseEntityの仕様
+
+         https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/ResponseEntity.html
+
+
+     ServiceクラスやControllerクラスでthorwsされた例外をハンドル。
+    
+    
+    * 例外クラスの実装
+     ビジネス例外クラスは、Exceptionクラスを継承して実装し、
+     システム例外クラスは、RuntimeExceptionクラスを継承して実装する。
+
+    * 例外レスポンス定義
+     例外クラスをそのまま返すと、スタックトレースなど、システムの内部情報が見えてしまうので、
+     必要な値を抜粋して返す。DozerのMapperを使って変換する例は以下の通り。
+      
+    
+
+    * 例外を発生させる実装
+
+     例外種別に応じて、実装する場所が異る。
+
+      * ビジネス例外は、Service層にてビジネス例外をthrow。
+
+
+エラーメッセージ
+--------------
+
+MessageSourceをインジェクションして利用する。classpath:message.propertiesにメッセージを定義する。

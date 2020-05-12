@@ -1,0 +1,13 @@
+
+Sphinx
+=========================
+
+自動ビルド
+--------------
+
+.. sourcecode:: bash                
+        :linenos:
+
+            # docがSphinxのルートディレクトリの場合
+            cd doc
+            sphinx-autobuild -b html source build/html
