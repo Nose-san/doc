@@ -1,0 +1,19 @@
+Spring Cloud Stream
+=========================
+
+概要
+--------------
+
+以下、Spring.ioでも説明文。
+Spring Cloud Stream is a framework for building highly scalable event-driven microservices connected with shared messaging systems.
+
+
+特徴
+--------------
+
+RabbitMQ, Kafka, Amazon Kinesis, Google Pubsub等にも対応済。アプリケーションのプログラミングでは、メッセージブローカーが何であるかは意識しない。
+
+
+全体構成イメージ
+--------------
+

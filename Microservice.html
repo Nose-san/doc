@@ -36,7 +36,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="索引" href="genindex.html" />
     <link rel="search" title="検索" href="search.html" />
-    <link rel="next" title="Web API" href="WebAPI.html" />
+    <link rel="next" title="Microservice Communication" href="Microservice-Communication.html" />
     <link rel="prev" title="Docker" href="Docker.html" /> 
 </head>
 
@@ -94,7 +94,7 @@
 <li class="toctree-l1"><a class="reference internal" href="Spring-to-Spring-boot.html">SpringからSpring bootへの移行</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Docker.html">Docker</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Microservice</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#ec">簡易ECサイトののマイクロサービスアーキテクチャ化</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#ec">ECサイトのマイクロサービスアーキテクチャ化</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#id1">サービス分割単位</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id2">各サービスの主な業務機能</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id3">各サービスの主なシステム機能</a></li>
@@ -104,8 +104,28 @@
 <li class="toctree-l3"><a class="reference internal" href="#order-serivcesaga-transaction">Order SerivceのSaga Transactionの設計と実装</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#id5">ECサイトの配達サービス拡張</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id6">追加の業務機能</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id7">システム全体構成（ヘキサゴナルアーキテクチャ）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id8">追加のシステム機能</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#spring">追加のSpringライブラリ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id9">追加のインフラ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id10">設計概要</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id11">チャネルの設計</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id12">コマンドの設計</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id13">コマンド、チャネル、コマンド送信処理の実装</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id14">コマンド受信処理、レスポンスメッセージ定義の実装</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#saga">Sagaトランザクション設計と実装</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#id15">ECサイトのフロントエンド改善</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id16">追加の業務機能</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id17">追加のシステム機能</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Microservice-Communication.html">Microservice Communication</a></li>
 <li class="toctree-l1"><a class="reference internal" href="WebAPI.html">Web API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="git.html">git</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Lombok.html">Lombok</a></li>
@@ -184,7 +204,7 @@
   <div class="section" id="microservice">
 <h1>Microservice<a class="headerlink" href="#microservice" title="このヘッドラインへのパーマリンク">¶</a></h1>
 <div class="section" id="ec">
-<h2>簡易ECサイトののマイクロサービスアーキテクチャ化<a class="headerlink" href="#ec" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2>ECサイトのマイクロサービスアーキテクチャ化<a class="headerlink" href="#ec" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>terasolunaチュートリアルの簡易ECサイトを使って、マイクロサービスアーキテクチャ移行検証を行った。</p>
 <div class="section" id="id1">
 <h3>サービス分割単位<a class="headerlink" href="#id1" title="このヘッドラインへのパーマリンク">¶</a></h3>
@@ -193,7 +213,7 @@ Order Serviceは、Goods ServiceとAccount Serviceを呼び出すBFFであり、
 Account ServiceとGoods Serviceは、BFFから呼び出される、マイクロサービスである。
 マイクロサービスを跨いだ、トランザクション処理が発生しないように分割する。例えば、簡易ECサイトの場合だと、Goods Serivceのトランザクション
 はAccount Serviceが持つデータを更新しないようにする（逆方向も同様）。</p>
-<div class="figure align-center" id="id5">
+<div class="figure align-center" id="id18">
 <a class="reference internal image-reference" href="./_static/img/overview.png"><img alt="" src="./_static/img/overview.png" /></a>
 <p class="caption"><span class="caption-text">全体イメージ（モノリシック vs マイクロサービス）</span></p>
 </div>
@@ -284,7 +304,7 @@ Account ServiceとGoods Serviceは、BFFから呼び出される、マイクロ�
 </div>
 <div class="section" id="id4">
 <h3>システム全体構成（ヘキサゴナルアーキテクチャ）<a class="headerlink" href="#id4" title="このヘッドラインへのパーマリンク">¶</a></h3>
-<div class="figure align-center" id="id6">
+<div class="figure align-center" id="id19">
 <a class="reference internal image-reference" href="./_static/img/hexArchitecture.png"><img alt="" src="./_static/img/hexArchitecture.png" /></a>
 <p class="caption"><span class="caption-text">システム全体構成（ヘキサゴナルアーキテクチャ）</span></p>
 </div>
@@ -352,7 +372,7 @@ ModelクラスのGoodsのListを受け取っている。それを、Mapperを使
 なお、以下のAPIは、offsetとlimitの指定で、指定したカテゴリIDに一致したGoodsの一部を返却しているが、
 総件数については、レスポンスヘッダーに入れている。
 また、BusinessExceptionは、throwsし例外ハンドラに例外処理は、委譲している。</p>
-<div class="highlight-bash notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+<div class="highlight-java notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
  4
@@ -386,48 +406,48 @@ ModelクラスのGoodsのListを受け取っている。それを、Mapperを使
 32
 33
 34
-35</pre></div></td><td class="code"><div class="highlight"><pre><span></span>//omitted
+35</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1">//omitted</span>
 
-@RestController
-@RequestMapping<span class="o">(</span><span class="s2">&quot;api/v1&quot;</span><span class="o">)</span>
-public class GoodsRestController <span class="o">{</span>
+<span class="nd">@RestController</span>
+<span class="nd">@RequestMapping</span><span class="p">(</span><span class="s">&quot;api/v1&quot;</span><span class="p">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">GoodsRestController</span> <span class="p">{</span>
 
-@Autowired
-GoodsService goodsService<span class="p">;</span>
+<span class="nd">@Autowired</span>
+<span class="n">GoodsService</span> <span class="n">goodsService</span><span class="p">;</span>
 
-@Autowired
-Mapper beanMapper<span class="p">;</span>
+<span class="nd">@Autowired</span>
+<span class="n">Mapper</span> <span class="n">beanMapper</span><span class="p">;</span>
 
-@GetMapping<span class="o">(</span><span class="s2">&quot;/goods&quot;</span><span class="o">)</span>
-public ResponseEntity&lt;List&lt;Goods&gt;&gt; getGoodsByCategoryId<span class="o">(</span>@RequestParam<span class="o">(</span><span class="nv">name</span> <span class="o">=</span> <span class="s2">&quot;categoryId&quot;</span>, <span class="nv">defaultValue</span> <span class="o">=</span> <span class="s2">&quot;1&quot;</span><span class="o">)</span> Integer categoryId,
-                                                        @RequestParam<span class="o">(</span><span class="nv">name</span> <span class="o">=</span> <span class="s2">&quot;offset&quot;</span>, <span class="nv">required</span> <span class="o">=</span> false, <span class="nv">defaultValue</span> <span class="o">=</span> <span class="s2">&quot;0&quot;</span><span class="o">)</span> Integer offset,
-                                                        @RequestParam<span class="o">(</span><span class="nv">name</span> <span class="o">=</span> <span class="s2">&quot;limit&quot;</span>, <span class="nv">required</span> <span class="o">=</span> false, <span class="nv">defaultValue</span> <span class="o">=</span> <span class="s2">&quot;10&quot;</span><span class="o">)</span> Integer limit<span class="o">)</span> throws BusinessException <span class="o">{</span>
+<span class="nd">@GetMapping</span><span class="p">(</span><span class="s">&quot;/goods&quot;</span><span class="p">)</span>
+<span class="kd">public</span> <span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Goods</span><span class="o">&gt;&gt;</span> <span class="nf">getGoodsByCategoryId</span><span class="p">(</span><span class="nd">@RequestParam</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;categoryId&quot;</span><span class="p">,</span> <span class="n">defaultValue</span> <span class="o">=</span> <span class="s">&quot;1&quot;</span><span class="p">)</span> <span class="n">Integer</span> <span class="n">categoryId</span><span class="p">,</span>
+                                                        <span class="nd">@RequestParam</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;offset&quot;</span><span class="p">,</span> <span class="n">required</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span> <span class="n">defaultValue</span> <span class="o">=</span> <span class="s">&quot;0&quot;</span><span class="p">)</span> <span class="n">Integer</span> <span class="n">offset</span><span class="p">,</span>
+                                                        <span class="nd">@RequestParam</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;limit&quot;</span><span class="p">,</span> <span class="n">required</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span> <span class="n">defaultValue</span> <span class="o">=</span> <span class="s">&quot;10&quot;</span><span class="p">)</span> <span class="n">Integer</span> <span class="n">limit</span><span class="p">)</span> <span class="kd">throws</span> <span class="n">BusinessException</span> <span class="p">{</span>
 
-    List&lt;Goods&gt; <span class="nv">goodsList</span> <span class="o">=</span> goodsService.findByCategoryId<span class="o">(</span>categoryId, offset, limit<span class="o">)</span><span class="p">;</span>
-    List&lt;GoodsResource&gt; <span class="nv">goodsResourcesList</span> <span class="o">=</span> new ArrayList&lt;&gt;<span class="o">()</span><span class="p">;</span>
-    <span class="k">for</span> <span class="o">(</span>Goods goods : goodsList<span class="o">)</span> <span class="o">{</span>
-        goodsResourcesList.add<span class="o">(</span>beanMapper.map<span class="o">(</span>goods, GoodsResource.class<span class="o">))</span><span class="p">;</span>
-    <span class="o">}</span>
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">Goods</span><span class="o">&gt;</span> <span class="n">goodsList</span> <span class="o">=</span> <span class="n">goodsService</span><span class="p">.</span><span class="na">findByCategoryId</span><span class="p">(</span><span class="n">categoryId</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">limit</span><span class="p">);</span>
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">GoodsResource</span><span class="o">&gt;</span> <span class="n">goodsResourcesList</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;&gt;</span><span class="p">();</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">Goods</span> <span class="n">goods</span> <span class="p">:</span> <span class="n">goodsList</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">goodsResourcesList</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="n">beanMapper</span><span class="p">.</span><span class="na">map</span><span class="p">(</span><span class="n">goods</span><span class="p">,</span> <span class="n">GoodsResource</span><span class="p">.</span><span class="na">class</span><span class="p">));</span>
+    <span class="p">}</span>
 
-    HttpHeaders <span class="nv">headers</span> <span class="o">=</span> new HttpHeaders<span class="o">()</span><span class="p">;</span>
-    Long <span class="nv">total</span> <span class="o">=</span> goodsService.getTotalWithCategoryId<span class="o">(</span>categoryId<span class="o">)</span><span class="p">;</span>
-    headers.add<span class="o">(</span><span class="s2">&quot;X-Total-Count&quot;</span>, String.valueOf<span class="o">(</span>total<span class="o">))</span><span class="p">;</span>
+    <span class="n">HttpHeaders</span> <span class="n">headers</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HttpHeaders</span><span class="p">();</span>
+    <span class="n">Long</span> <span class="n">total</span> <span class="o">=</span> <span class="n">goodsService</span><span class="p">.</span><span class="na">getTotalWithCategoryId</span><span class="p">(</span><span class="n">categoryId</span><span class="p">);</span>
+    <span class="n">headers</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="s">&quot;X-Total-Count&quot;</span><span class="p">,</span> <span class="n">String</span><span class="p">.</span><span class="na">valueOf</span><span class="p">(</span><span class="n">total</span><span class="p">));</span>
 
-    <span class="k">return</span> new ResponseEntity&lt;&gt;<span class="o">(</span>
-            goodsList,
-            headers,
-            HttpStatus.OK<span class="o">)</span><span class="p">;</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="n">ResponseEntity</span><span class="o">&lt;&gt;</span><span class="p">(</span>
+            <span class="n">goodsList</span><span class="p">,</span>
+            <span class="n">headers</span><span class="p">,</span>
+            <span class="n">HttpStatus</span><span class="p">.</span><span class="na">OK</span><span class="p">);</span>
 
-<span class="o">}</span>
+<span class="p">}</span>
 
-//omitted
+<span class="c1">//omitted</span>
 </pre></div>
 </td></tr></table></div>
 <p><strong>Resourceクラス</strong></p>
 <p>MVCアプリケーションには存在しないREST APIサービス特有のクラスである。
 サービス内部の業務ロジックで用いるドメインオブジェクトと、サービス外部提向けに提供する際の、情報は異る可能性を考慮し、
 Modelクラスとは別に、Resourceクラスを用意する。</p>
-<div class="highlight-bash notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+<div class="highlight-java notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
  4
@@ -449,33 +469,33 @@ Modelクラスとは別に、Resourceクラスを用意する。</p>
 20
 21
 22
-23</pre></div></td><td class="code"><div class="highlight"><pre><span></span>//omitted
+23</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1">//omitted</span>
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-@Data
-public class GoodsResource implements Serializable <span class="o">{</span>
+<span class="nd">@AllArgsConstructor</span>
+<span class="nd">@NoArgsConstructor</span>
+<span class="nd">@Builder</span>
+<span class="nd">@Data</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">GoodsResource</span> <span class="kd">implements</span> <span class="n">Serializable</span> <span class="p">{</span>
 
-    private static final long <span class="nv">serialVersionUID</span> <span class="o">=</span> 1L<span class="p">;</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">long</span> <span class="n">serialVersionUID</span> <span class="o">=</span> <span class="mi">1L</span><span class="p">;</span>
 
-    private String id<span class="p">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">id</span><span class="p">;</span>
 
-    private String name<span class="p">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="p">;</span>
 
-    private String description<span class="p">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">description</span><span class="p">;</span>
 
-    private int categoryId<span class="p">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">categoryId</span><span class="p">;</span>
 
-    private int price<span class="p">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">price</span><span class="p">;</span>
 
-    private int stock<span class="p">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">stock</span><span class="p">;</span>
 
-<span class="o">}</span>
+<span class="p">}</span>
 </pre></div>
 </td></tr></table></div>
 <p><strong>Modelクラス</strong></p>
-<div class="highlight-bash notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+<div class="highlight-java notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
  4
@@ -512,44 +532,44 @@ public class GoodsResource implements Serializable <span class="o">{</span>
 35
 36
 37
-38</pre></div></td><td class="code"><div class="highlight"><pre><span></span>//omitted
+38</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1">//omitted</span>
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-@Data
-public class Goods implements Serializable <span class="o">{</span>
+<span class="nd">@AllArgsConstructor</span>
+<span class="nd">@NoArgsConstructor</span>
+<span class="nd">@Builder</span>
+<span class="nd">@Data</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Goods</span> <span class="kd">implements</span> <span class="n">Serializable</span> <span class="p">{</span>
 
-    private static final long <span class="nv">serialVersionUID</span> <span class="o">=</span> 1L<span class="p">;</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">long</span> <span class="n">serialVersionUID</span> <span class="o">=</span> <span class="mi">1L</span><span class="p">;</span>
 
-    private String id<span class="p">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">id</span><span class="p">;</span>
 
-    private String name<span class="p">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="p">;</span>
 
-    private String description<span class="p">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">description</span><span class="p">;</span>
 
-    private int categoryId<span class="p">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">categoryId</span><span class="p">;</span>
 
-    private int price<span class="p">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">price</span><span class="p">;</span>
 
-    private int stock<span class="p">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">stock</span><span class="p">;</span>
 
-    @Override
-    public boolean equals<span class="o">(</span>Object obj<span class="o">)</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">equals</span><span class="p">(</span><span class="n">Object</span> <span class="n">obj</span><span class="p">)</span> <span class="p">{</span>
 
-        <span class="k">if</span> <span class="o">(</span>!<span class="o">(</span>obj instanceof Goods<span class="o">))</span> <span class="o">{</span>
-            <span class="k">return</span> false<span class="p">;</span>
-        <span class="o">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">obj</span> <span class="k">instanceof</span> <span class="n">Goods</span><span class="p">))</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+        <span class="p">}</span>
 
-        <span class="k">return</span> id.equals<span class="o">(((</span>Goods<span class="o">)</span> obj<span class="o">)</span>.getId<span class="o">())</span><span class="p">;</span>
-    <span class="o">}</span>
+        <span class="k">return</span> <span class="n">id</span><span class="p">.</span><span class="na">equals</span><span class="p">(((</span><span class="n">Goods</span><span class="p">)</span> <span class="n">obj</span><span class="p">).</span><span class="na">getId</span><span class="p">());</span>
+    <span class="p">}</span>
 
-    @Override
-    public int hashCode<span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> id.hashCode<span class="o">()</span><span class="p">;</span>
-    <span class="o">}</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">hashCode</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">id</span><span class="p">.</span><span class="na">hashCode</span><span class="p">();</span>
+    <span class="p">}</span>
 
-<span class="o">}</span>
+<span class="p">}</span>
 </pre></div>
 </td></tr></table></div>
 <p><strong>Serivceクラス</strong></p>
@@ -557,7 +577,7 @@ public class Goods implements Serializable <span class="o">{</span>
 ビジネス例外をthrowする。そうでない場合は、Repositoryクラスを呼び、データを永続化する。</p>
 <p><strong>Repositoryクラス</strong></p>
 <p>MyBatis3を使った、Repositoryクラスの実装である。</p>
-<div class="highlight-bash notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+<div class="highlight-java notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
  4
@@ -572,28 +592,28 @@ public class Goods implements Serializable <span class="o">{</span>
 13
 14
 15
-16</pre></div></td><td class="code"><div class="highlight"><pre><span></span>//omitted
+16</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1">//omitted</span>
 
-@Repository
-@Mapper
-public interface GoodsRepository <span class="o">{</span>
+<span class="nd">@Repository</span>
+<span class="nd">@Mapper</span>
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">GoodsRepository</span> <span class="p">{</span>
 
-    List&lt;Goods&gt; findPageByCategoryId<span class="o">(</span>Integer categoryId, RowBounds rowBounds<span class="o">)</span><span class="p">;</span>
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">Goods</span><span class="o">&gt;</span> <span class="nf">findPageByCategoryId</span><span class="p">(</span><span class="n">Integer</span> <span class="n">categoryId</span><span class="p">,</span> <span class="n">RowBounds</span> <span class="n">rowBounds</span><span class="p">);</span>
 
-    Goods findById<span class="o">(</span>String id<span class="o">)</span><span class="p">;</span>
+    <span class="n">Goods</span> <span class="nf">findById</span><span class="p">(</span><span class="n">String</span> <span class="n">id</span><span class="p">);</span>
 
-    List&lt;Integer&gt; getAllCategories<span class="o">()</span><span class="p">;</span>
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;</span> <span class="nf">getAllCategories</span><span class="p">();</span>
 
-    long countByCategoryId<span class="o">(</span>int categoryId<span class="o">)</span><span class="p">;</span>
+    <span class="kt">long</span> <span class="nf">countByCategoryId</span><span class="p">(</span><span class="kt">int</span> <span class="n">categoryId</span><span class="p">);</span>
 
-    boolean updateById<span class="o">(</span>Goods goods<span class="o">)</span><span class="p">;</span>
-<span class="o">}</span>
+    <span class="kt">boolean</span> <span class="nf">updateById</span><span class="p">(</span><span class="n">Goods</span> <span class="n">goods</span><span class="p">);</span>
+<span class="p">}</span>
 </pre></div>
 </td></tr></table></div>
 <p><strong>MyBatisマッピングファイル</strong></p>
 <p>Modelクラスのオブジェクトを返り値として受け取りたい場合は、
 resultMapで、オブジェクトフィールド名とテーブルのカラム名を対応づける。</p>
-<div class="highlight-bash notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+<div class="highlight-xml notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
  4
@@ -625,37 +645,37 @@ resultMapで、オブジェクトフィールド名とテーブルのカラム�
 30
 31
 32
-33</pre></div></td><td class="code"><div class="highlight"><pre><span></span>&lt;?xml <span class="nv">version</span><span class="o">=</span><span class="s2">&quot;1.0&quot;</span> <span class="nv">encoding</span><span class="o">=</span><span class="s2">&quot;UTF-8&quot;</span>?&gt;
-&lt;!DOCTYPE mapper PUBLIC <span class="s2">&quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;</span>
-        <span class="s2">&quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;</span>&gt;
-&lt;mapper <span class="nv">namespace</span><span class="o">=</span><span class="s2">&quot;com.example.good.domain.repository.GoodsRepository&quot;</span>&gt;
+33</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<span class="cp">&lt;!DOCTYPE mapper PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;</span>
+<span class="cp">        &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;</span>
+<span class="nt">&lt;mapper</span> <span class="na">namespace=</span><span class="s">&quot;com.example.good.domain.repository.GoodsRepository&quot;</span><span class="nt">&gt;</span>
 
-    &lt;resultMap <span class="nv">id</span><span class="o">=</span><span class="s2">&quot;goodsResultMap&quot;</span> <span class="nv">type</span><span class="o">=</span><span class="s2">&quot;com.example.good.domain.model.Goods&quot;</span>&gt;
-        &lt;id <span class="nv">property</span><span class="o">=</span><span class="s2">&quot;id&quot;</span> <span class="nv">column</span><span class="o">=</span><span class="s2">&quot;goods_id&quot;</span> /&gt;
-        &lt;result <span class="nv">property</span><span class="o">=</span><span class="s2">&quot;name&quot;</span> <span class="nv">column</span><span class="o">=</span><span class="s2">&quot;goods_name&quot;</span> /&gt;
-        &lt;result <span class="nv">property</span><span class="o">=</span><span class="s2">&quot;description&quot;</span> <span class="nv">column</span><span class="o">=</span><span class="s2">&quot;description&quot;</span> /&gt;
-        &lt;result <span class="nv">property</span><span class="o">=</span><span class="s2">&quot;categoryId&quot;</span> <span class="nv">column</span><span class="o">=</span><span class="s2">&quot;category_id&quot;</span> /&gt;
-        &lt;result <span class="nv">property</span><span class="o">=</span><span class="s2">&quot;price&quot;</span> <span class="nv">column</span><span class="o">=</span><span class="s2">&quot;price&quot;</span> /&gt;
-        &lt;result <span class="nv">property</span><span class="o">=</span><span class="s2">&quot;stock&quot;</span> <span class="nv">column</span><span class="o">=</span><span class="s2">&quot;stock&quot;</span> /&gt;
-    &lt;/resultMap&gt;
+    <span class="nt">&lt;resultMap</span> <span class="na">id=</span><span class="s">&quot;goodsResultMap&quot;</span> <span class="na">type=</span><span class="s">&quot;com.example.good.domain.model.Goods&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;id</span> <span class="na">property=</span><span class="s">&quot;id&quot;</span> <span class="na">column=</span><span class="s">&quot;goods_id&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;result</span> <span class="na">property=</span><span class="s">&quot;name&quot;</span> <span class="na">column=</span><span class="s">&quot;goods_name&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;result</span> <span class="na">property=</span><span class="s">&quot;description&quot;</span> <span class="na">column=</span><span class="s">&quot;description&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;result</span> <span class="na">property=</span><span class="s">&quot;categoryId&quot;</span> <span class="na">column=</span><span class="s">&quot;category_id&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;result</span> <span class="na">property=</span><span class="s">&quot;price&quot;</span> <span class="na">column=</span><span class="s">&quot;price&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;result</span> <span class="na">property=</span><span class="s">&quot;stock&quot;</span> <span class="na">column=</span><span class="s">&quot;stock&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/resultMap&gt;</span>
 
-    &lt;<span class="k">select</span> <span class="nv">id</span><span class="o">=</span><span class="s2">&quot;findPageByCategoryId&quot;</span> <span class="nv">parameterType</span><span class="o">=</span><span class="s2">&quot;int&quot;</span> <span class="nv">resultMap</span><span class="o">=</span><span class="s2">&quot;goodsResultMap&quot;</span>&gt;
-        &lt;!<span class="o">[</span>CDATA<span class="o">[</span>
-        SELECT
-            goods_id,
-            goods_name,
-            description,
-            category_id,
-            price,
-            stock
-        FROM
-            goods
-        WHERE
-            <span class="nv">category_id</span> <span class="o">=</span> <span class="c1">#{categoryId}</span>
-        ORDER BY
-            goods_id
-        <span class="o">]]</span>&gt;
-    &lt;/select&gt;
+    <span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&quot;findPageByCategoryId&quot;</span> <span class="na">parameterType=</span><span class="s">&quot;int&quot;</span> <span class="na">resultMap=</span><span class="s">&quot;goodsResultMap&quot;</span><span class="nt">&gt;</span>
+        <span class="cp">&lt;![CDATA[</span>
+<span class="cp">        SELECT</span>
+<span class="cp">            goods_id,</span>
+<span class="cp">            goods_name,</span>
+<span class="cp">            description,</span>
+<span class="cp">            category_id,</span>
+<span class="cp">            price,</span>
+<span class="cp">            stock</span>
+<span class="cp">        FROM</span>
+<span class="cp">            goods</span>
+<span class="cp">        WHERE</span>
+<span class="cp">            category_id = #{categoryId}</span>
+<span class="cp">        ORDER BY</span>
+<span class="cp">            goods_id</span>
+<span class="cp">        ]]&gt;</span>
+    <span class="nt">&lt;/select&gt;</span>
 
 //omitted
 </pre></div>
@@ -666,7 +686,7 @@ Contorollerクラス内の各メソッドで発生する例外を横断してハ
 以下は、ビジネス例外をハンドリングするメソッドの例である。Serviceクラスの実装サンプルで示したように、
 エラーコード、エラーメッセージが格納されているbusinessExceptionをbodyに埋め込み、400エラー（BAD REQUEST）を
 REST CLIENTに返している。</p>
-<div class="highlight-bash notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+<div class="highlight-java notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
  4
@@ -682,23 +702,23 @@ REST CLIENTに返している。</p>
 14
 15
 16
-17</pre></div></td><td class="code"><div class="highlight"><pre><span></span>//omitted
+17</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1">//omitted</span>
 
-@ControllerAdvice
-public class CommonExceptionHandler <span class="o">{</span>
+<span class="nd">@ControllerAdvice</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CommonExceptionHandler</span> <span class="p">{</span>
 
-    @Autowired
-    Mapper beanMapper<span class="p">;</span>
+    <span class="nd">@Autowired</span>
+    <span class="n">Mapper</span> <span class="n">beanMapper</span><span class="p">;</span>
 
-    @ExceptionHandler<span class="o">(</span>BusinessException.class<span class="o">)</span>
-    public ResponseEntity&lt;Object&gt; handleBusinessException<span class="o">(</span>BusinessException businessException<span class="o">){</span>
-        <span class="k">return</span> new ResponseEntity&lt;&gt;<span class="o">(</span>
-                beanMapper.map<span class="o">(</span>businessException, BusinessExceptionResponse.class<span class="o">)</span>,
-                HttpStatus.BAD_REQUEST<span class="o">)</span><span class="p">;</span>
+    <span class="nd">@ExceptionHandler</span><span class="p">(</span><span class="n">BusinessException</span><span class="p">.</span><span class="na">class</span><span class="p">)</span>
+    <span class="kd">public</span> <span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;</span> <span class="nf">handleBusinessException</span><span class="p">(</span><span class="n">BusinessException</span> <span class="n">businessException</span><span class="p">){</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="n">ResponseEntity</span><span class="o">&lt;&gt;</span><span class="p">(</span>
+                <span class="n">beanMapper</span><span class="p">.</span><span class="na">map</span><span class="p">(</span><span class="n">businessException</span><span class="p">,</span> <span class="n">BusinessExceptionResponse</span><span class="p">.</span><span class="na">class</span><span class="p">),</span>
+                <span class="n">HttpStatus</span><span class="p">.</span><span class="na">BAD_REQUEST</span><span class="p">);</span>
 
-    <span class="o">}</span>
+    <span class="p">}</span>
 
-//omitted
+<span class="c1">//omitted</span>
 </pre></div>
 </td></tr></table></div>
 </div>
@@ -758,7 +778,7 @@ public class CommonExceptionHandler <span class="o">{</span>
 <p>以下は「アカウント更新」のAPIに対応するContorollerクラスの実装である。
 Goods Seriviceとの実装上の違いは、リクエストボディの引数に、&#64;Validatedを付けて、バリデーション処理を行っている。
 バリデーション例外が発生した場合は、例外ハンドラクラスで、ハンドリングを行う。</p>
-<div class="highlight-bash notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+<div class="highlight-java notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
  4
@@ -769,22 +789,22 @@ Goods Seriviceとの実装上の違いは、リクエストボディの引数に
  9
 10
 11
-12</pre></div></td><td class="code"><div class="highlight"><pre><span></span>//omitted
+12</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1">//omitted</span>
 
-@PutMapping<span class="o">(</span><span class="s2">&quot;/account&quot;</span><span class="o">)</span>
-@ResponseStatus<span class="o">(</span>HttpStatus.NO_CONTENT<span class="o">)</span>
-public void updateAccount<span class="o">(</span>@RequestParam<span class="o">(</span><span class="nv">name</span> <span class="o">=</span> <span class="s2">&quot;id&quot;</span><span class="o">)</span> String id,
-                        @Validated @RequestBody AccountUpdateResource accountUpdateResource<span class="o">)</span> throws BusinessException<span class="o">{</span>
-    Account <span class="nv">account</span> <span class="o">=</span> beanMapper.map<span class="o">(</span>accountUpdateResource, Account.class<span class="o">)</span><span class="p">;</span>
-    account.setId<span class="o">(</span>id<span class="o">)</span><span class="p">;</span>
-    accountService.update<span class="o">(</span>account<span class="o">)</span><span class="p">;</span>
-<span class="o">}</span>
+<span class="nd">@PutMapping</span><span class="p">(</span><span class="s">&quot;/account&quot;</span><span class="p">)</span>
+<span class="nd">@ResponseStatus</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">.</span><span class="na">NO_CONTENT</span><span class="p">)</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">updateAccount</span><span class="p">(</span><span class="nd">@RequestParam</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;id&quot;</span><span class="p">)</span> <span class="n">String</span> <span class="n">id</span><span class="p">,</span>
+                        <span class="nd">@Validated</span> <span class="nd">@RequestBody</span> <span class="n">AccountUpdateResource</span> <span class="n">accountUpdateResource</span><span class="p">)</span> <span class="kd">throws</span> <span class="n">BusinessException</span><span class="p">{</span>
+    <span class="n">Account</span> <span class="n">account</span> <span class="o">=</span> <span class="n">beanMapper</span><span class="p">.</span><span class="na">map</span><span class="p">(</span><span class="n">accountUpdateResource</span><span class="p">,</span> <span class="n">Account</span><span class="p">.</span><span class="na">class</span><span class="p">);</span>
+    <span class="n">account</span><span class="p">.</span><span class="na">setId</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+    <span class="n">accountService</span><span class="p">.</span><span class="na">update</span><span class="p">(</span><span class="n">account</span><span class="p">);</span>
+<span class="p">}</span>
 
-//omitted
+<span class="c1">//omitted</span>
 </pre></div>
 </td></tr></table></div>
 <p><strong>Resourceクラス</strong></p>
-<div class="highlight-bash notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+<div class="highlight-java notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
  4
@@ -795,24 +815,24 @@ public void updateAccount<span class="o">(</span>@RequestParam<span class="o">(<
  9
 10
 11
-12</pre></div></td><td class="code"><div class="highlight"><pre><span></span>//omitted
+12</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1">//omitted</span>
 
-public class AccountUpdateResource implements  Serializable<span class="o">{</span>
-    private static final long <span class="nv">serialVersionUID</span> <span class="o">=</span> 1L<span class="p">;</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">AccountUpdateResource</span> <span class="kd">implements</span>  <span class="n">Serializable</span><span class="p">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">long</span> <span class="n">serialVersionUID</span> <span class="o">=</span> <span class="mi">1L</span><span class="p">;</span>
 
-    private String id<span class="p">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">id</span><span class="p">;</span>
 
-    @NotNull
-    @Size<span class="o">(</span><span class="nv">min</span> <span class="o">=</span> <span class="m">1</span>, <span class="nv">max</span> <span class="o">=</span> <span class="m">255</span><span class="o">)</span>
-    private String name<span class="p">;</span>
+    <span class="nd">@NotNull</span>
+    <span class="nd">@Size</span><span class="p">(</span><span class="n">min</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">max</span> <span class="o">=</span> <span class="mi">255</span><span class="p">)</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="p">;</span>
 
-//omitted
+<span class="c1">//omitted</span>
 </pre></div>
 </td></tr></table></div>
 <p><strong>Serivceクラス</strong></p>
 <p>以下は、アカウント更新処理メソッドの実装である。REST CLIENTから累計購入金額が購入額上限を上回った場合、
 ビジネス例外をthrowする。そうでない場合は、Repositoryクラスを呼び、データを永続化する。</p>
-<div class="highlight-bash notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+<div class="highlight-java notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
  4
@@ -823,18 +843,18 @@ public class AccountUpdateResource implements  Serializable<span class="o">{</sp
  9
 10
 11
-12</pre></div></td><td class="code"><div class="highlight"><pre><span></span>//omitted
+12</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1">//omitted</span>
 
-public void update<span class="o">(</span>Account account<span class="o">)</span> throws BusinessException <span class="o">{</span>
-    <span class="k">if</span> <span class="o">(</span>parseInt<span class="o">(</span>account.getCreditCharge<span class="o">())</span> &gt; parseInt<span class="o">(</span>account.getCreditLimit<span class="o">())){</span>
-        String <span class="nv">errorCode</span> <span class="o">=</span> <span class="s2">&quot;BE0003&quot;</span><span class="p">;</span>
-        throw new BusinessException<span class="o">(</span>errorCode, messageSource.getMessage<span class="o">(</span>
-                errorCode, new String<span class="o">[]{</span>account.getCreditCharge<span class="o">()</span>, account.getCreditLimit<span class="o">()}</span>, Locale.getDefault<span class="o">()))</span><span class="p">;</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">update</span><span class="p">(</span><span class="n">Account</span> <span class="n">account</span><span class="p">)</span> <span class="kd">throws</span> <span class="n">BusinessException</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">parseInt</span><span class="p">(</span><span class="n">account</span><span class="p">.</span><span class="na">getCreditCharge</span><span class="p">())</span> <span class="o">&gt;</span> <span class="n">parseInt</span><span class="p">(</span><span class="n">account</span><span class="p">.</span><span class="na">getCreditLimit</span><span class="p">())){</span>
+        <span class="n">String</span> <span class="n">errorCode</span> <span class="o">=</span> <span class="s">&quot;BE0003&quot;</span><span class="p">;</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="n">BusinessException</span><span class="p">(</span><span class="n">errorCode</span><span class="p">,</span> <span class="n">messageSource</span><span class="p">.</span><span class="na">getMessage</span><span class="p">(</span>
+                <span class="n">errorCode</span><span class="p">,</span> <span class="k">new</span> <span class="n">String</span><span class="o">[]</span><span class="p">{</span><span class="n">account</span><span class="p">.</span><span class="na">getCreditCharge</span><span class="p">(),</span> <span class="n">account</span><span class="p">.</span><span class="na">getCreditLimit</span><span class="p">()},</span> <span class="n">Locale</span><span class="p">.</span><span class="na">getDefault</span><span class="p">()));</span>
 
-    <span class="o">}</span><span class="k">else</span><span class="o">{</span>
-        accountRepository.updateById<span class="o">(</span>account<span class="o">)</span><span class="p">;</span>
-    <span class="o">}</span>
-<span class="o">}</span>
+    <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+        <span class="n">accountRepository</span><span class="p">.</span><span class="na">updateById</span><span class="p">(</span><span class="n">account</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 </pre></div>
 </td></tr></table></div>
 <p><strong>例外ハンドリングクラス</strong></p>
@@ -848,7 +868,7 @@ public void update<span class="o">(</span>Account account<span class="o">)</span
 <p>補償トランザクションとは、フォーワードトランザクション実行で失敗が発生した際、
 失敗以前に行った変更を、打ち消すトランザクションである。
 例えば、以下の例では、フォーワードトランザクションTn+1が失敗した場合、補償トランザクションCnからC1を実行している。</p>
-<div class="figure align-center" id="id7">
+<div class="figure align-center" id="id20">
 <a class="reference internal image-reference" href="./_static/img/conpensatingTransaction.png"><img alt="" src="./_static/img/conpensatingTransaction.png" /></a>
 <p class="caption"><span class="caption-text">補償トランザクションの実行イメージ</span></p>
 </div>
@@ -906,30 +926,30 @@ public void update<span class="o">(</span>Account account<span class="o">)</span
 <p>Order ServiceのServiceクラスから、Sagaの実行に必要な情報をSagaStateクラスに格納した後、
 SagaManagerクラスから実行。Sagaの定義（各STEPのトランザクションの定義とSTEPの順序の定義）は、
 SagaPaticipantクラスとSagaDefinitionクラスを使ってDIする。</p>
-<div class="figure align-center" id="id8">
+<div class="figure align-center" id="id21">
 <a class="reference internal image-reference" href="./_static/img/sagaSequence.png"><img alt="" src="./_static/img/sagaSequence.png" /></a>
 <p class="caption"><span class="caption-text">処理シーケンスイメージ</span></p>
 </div>
 <p><strong>SagaPaticipantクラス</strong></p>
 <p>以下の、フォーワードトランザクションと、補償トランザクションのメソッドの組み合わせを、
 インタフェース定義している。ビジネス例外をthrowし、SagaParticipantを実行するSagaManagerで例外ハンドリングできるようにする。</p>
-<div class="highlight-bash notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+<div class="highlight-java notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
 2
 3
 4
 5
-6</pre></div></td><td class="code"><div class="highlight"><pre><span></span>//omitted
+6</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1">//omitted</span>
 
-public interface SagaParticipant <span class="o">{</span>
-    void forwardTransaction<span class="o">(</span>CreateOrderSagaState createOrderSagaState<span class="o">)</span> throws BusinessException<span class="p">;</span>
-    void compensatingTransaction<span class="o">(</span>CreateOrderSagaState createOrderSagaState<span class="o">)</span> throws BusinessException<span class="p">;</span>
-<span class="o">}</span>
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">SagaParticipant</span> <span class="p">{</span>
+    <span class="kt">void</span> <span class="nf">forwardTransaction</span><span class="p">(</span><span class="n">CreateOrderSagaState</span> <span class="n">createOrderSagaState</span><span class="p">)</span> <span class="kd">throws</span> <span class="n">BusinessException</span><span class="p">;</span>
+    <span class="kt">void</span> <span class="nf">compensatingTransaction</span><span class="p">(</span><span class="n">CreateOrderSagaState</span> <span class="n">createOrderSagaState</span><span class="p">)</span> <span class="kd">throws</span> <span class="n">BusinessException</span><span class="p">;</span>
+<span class="p">}</span>
 </pre></div>
 </td></tr></table></div>
 <p>Sagaトランザクションの各STEPは、自身が行いたい処理を実装する。
 以下は、商品注文時、商品在庫を減らす処理をフォーワードトランザクションとして定義し、
 商品在庫を増やす処理を補償トランザクションで定義している。</p>
-<div class="highlight-bash notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+<div class="highlight-java notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
  4
@@ -950,35 +970,35 @@ public interface SagaParticipant <span class="o">{</span>
 19
 20
 21
-22</pre></div></td><td class="code"><div class="highlight"><pre><span></span>//omitted
+22</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1">//omitted</span>
 
-@Component<span class="o">(</span><span class="s2">&quot;goodsServiceParticipant&quot;</span><span class="o">)</span>
-public class GoodsServiceParticipant implements SagaParticipant <span class="o">{</span>
+<span class="nd">@Component</span><span class="p">(</span><span class="s">&quot;goodsServiceParticipant&quot;</span><span class="p">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">GoodsServiceParticipant</span> <span class="kd">implements</span> <span class="n">SagaParticipant</span> <span class="p">{</span>
 
-    @Autowired
-    GoodsService goodsService<span class="p">;</span>
+    <span class="nd">@Autowired</span>
+    <span class="n">GoodsService</span> <span class="n">goodsService</span><span class="p">;</span>
 
-    @Override
-    public void forwardTransaction<span class="o">(</span>CreateOrderSagaState createOrderSagaState<span class="o">)</span> throws BusinessException <span class="o">{</span>
-        <span class="k">for</span> <span class="o">(</span>OrderLine orderLine : createOrderSagaState.getOrderLines<span class="o">())</span> <span class="o">{</span>
-            goodsService.decreaseStock<span class="o">(</span>orderLine.getGoods<span class="o">()</span>, orderLine.getQuantity<span class="o">())</span><span class="p">;</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">forwardTransaction</span><span class="p">(</span><span class="n">CreateOrderSagaState</span> <span class="n">createOrderSagaState</span><span class="p">)</span> <span class="kd">throws</span> <span class="n">BusinessException</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">OrderLine</span> <span class="n">orderLine</span> <span class="p">:</span> <span class="n">createOrderSagaState</span><span class="p">.</span><span class="na">getOrderLines</span><span class="p">())</span> <span class="p">{</span>
+            <span class="n">goodsService</span><span class="p">.</span><span class="na">decreaseStock</span><span class="p">(</span><span class="n">orderLine</span><span class="p">.</span><span class="na">getGoods</span><span class="p">(),</span> <span class="n">orderLine</span><span class="p">.</span><span class="na">getQuantity</span><span class="p">());</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    @Override
-    public void compensatingTransaction<span class="o">(</span>CreateOrderSagaState createOrderSagaState<span class="o">)</span> throws BusinessException<span class="o">{</span>
-        <span class="k">for</span> <span class="o">(</span>OrderLine orderLine : createOrderSagaState.getOrderLines<span class="o">())</span> <span class="o">{</span>
-            goodsService.increaseStock<span class="o">(</span>orderLine.getGoods<span class="o">()</span>, orderLine.getQuantity<span class="o">())</span><span class="p">;</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-<span class="o">}</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">compensatingTransaction</span><span class="p">(</span><span class="n">CreateOrderSagaState</span> <span class="n">createOrderSagaState</span><span class="p">)</span> <span class="kd">throws</span> <span class="n">BusinessException</span><span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">OrderLine</span> <span class="n">orderLine</span> <span class="p">:</span> <span class="n">createOrderSagaState</span><span class="p">.</span><span class="na">getOrderLines</span><span class="p">())</span> <span class="p">{</span>
+            <span class="n">goodsService</span><span class="p">.</span><span class="na">increaseStock</span><span class="p">(</span><span class="n">orderLine</span><span class="p">.</span><span class="na">getGoods</span><span class="p">(),</span> <span class="n">orderLine</span><span class="p">.</span><span class="na">getQuantity</span><span class="p">());</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 </pre></div>
 </td></tr></table></div>
 <p><strong>SagaDefinitionクラス</strong></p>
 <p>各SagaPaticipantクラスを組み合わせて、Sagaの定義を行う。
 以下では、各SagaPaticipantの実装クラスを引数にして、List&lt;SagaParticipant&gt;型でSagaを定義している。
 DIしておき、Sagaを実際に実行する、SagaManagerクラスから使えるようにしておく。</p>
-<div class="highlight-bash notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+<div class="highlight-java notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
  4
@@ -995,30 +1015,30 @@ DIしておき、Sagaを実際に実行する、SagaManagerクラスから使え
 15
 16
 17
-18</pre></div></td><td class="code"><div class="highlight"><pre><span></span>//omitted
+18</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1">//omitted</span>
 
-@Configuration
-public class SagaConfig <span class="o">{</span>
+<span class="nd">@Configuration</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">SagaConfig</span> <span class="p">{</span>
 
-    @Bean
-    public CreateOrderSaga createOrderSaga<span class="o">(</span>OrderServiceParticipant orderServiceParticipant,
-                                        GoodsServiceParticipant goodsServiceParticipant,
-                                        AccountServiceParticipant accountServiceParticipant<span class="o">){</span>
-        CreateOrderSaga <span class="nv">createOrderSaga</span> <span class="o">=</span> new CreateOrderSaga<span class="o">()</span><span class="p">;</span>
-        List&lt;SagaParticipant&gt; <span class="nv">sagaDefinition</span> <span class="o">=</span> new ArrayList&lt;&gt;<span class="o">()</span><span class="p">;</span>
-        sagaDefinition.add<span class="o">(</span>orderServiceParticipant<span class="o">)</span><span class="p">;</span>
-        sagaDefinition.add<span class="o">(</span>goodsServiceParticipant<span class="o">)</span><span class="p">;</span>
-        sagaDefinition.add<span class="o">(</span>accountServiceParticipant<span class="o">)</span><span class="p">;</span>
-        createOrderSaga.setSagaDefinition<span class="o">(</span>sagaDefinition<span class="o">)</span><span class="p">;</span>
-        <span class="k">return</span> createOrderSaga<span class="p">;</span>
-    <span class="o">}</span>
-<span class="o">}</span>
+    <span class="nd">@Bean</span>
+    <span class="kd">public</span> <span class="n">CreateOrderSaga</span> <span class="nf">createOrderSaga</span><span class="p">(</span><span class="n">OrderServiceParticipant</span> <span class="n">orderServiceParticipant</span><span class="p">,</span>
+                                        <span class="n">GoodsServiceParticipant</span> <span class="n">goodsServiceParticipant</span><span class="p">,</span>
+                                        <span class="n">AccountServiceParticipant</span> <span class="n">accountServiceParticipant</span><span class="p">){</span>
+        <span class="n">CreateOrderSaga</span> <span class="n">createOrderSaga</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CreateOrderSaga</span><span class="p">();</span>
+        <span class="n">List</span><span class="o">&lt;</span><span class="n">SagaParticipant</span><span class="o">&gt;</span> <span class="n">sagaDefinition</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;&gt;</span><span class="p">();</span>
+        <span class="n">sagaDefinition</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="n">orderServiceParticipant</span><span class="p">);</span>
+        <span class="n">sagaDefinition</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="n">goodsServiceParticipant</span><span class="p">);</span>
+        <span class="n">sagaDefinition</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="n">accountServiceParticipant</span><span class="p">);</span>
+        <span class="n">createOrderSaga</span><span class="p">.</span><span class="na">setSagaDefinition</span><span class="p">(</span><span class="n">sagaDefinition</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">createOrderSaga</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 </pre></div>
 </td></tr></table></div>
 <p><strong>SagaStateクラス</strong></p>
 <p>Sagaの実行時に必要な状態を保持するクラス。以下は、商品注文処理に必要な、
 注文商品情報やアカウント情報を保持している。</p>
-<div class="highlight-bash notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+<div class="highlight-java notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
  4
@@ -1035,24 +1055,24 @@ public class SagaConfig <span class="o">{</span>
 15
 16
 17
-18</pre></div></td><td class="code"><div class="highlight"><pre><span></span>//omitted
+18</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1">//omitted</span>
 
-@Data
-@Component
-public class CreateOrderSagaState extends SagaState<span class="o">{</span>
-    private Order order<span class="p">;</span>
-    private List&lt;OrderLine&gt; orderLines<span class="p">;</span>
-    private Account account<span class="p">;</span>
+<span class="nd">@Data</span>
+<span class="nd">@Component</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CreateOrderSagaState</span> <span class="kd">extends</span> <span class="n">SagaState</span><span class="p">{</span>
+    <span class="kd">private</span> <span class="n">Order</span> <span class="n">order</span><span class="p">;</span>
+    <span class="kd">private</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">OrderLine</span><span class="o">&gt;</span> <span class="n">orderLines</span><span class="p">;</span>
+    <span class="kd">private</span> <span class="n">Account</span> <span class="n">account</span><span class="p">;</span>
 
 
-    public CreateOrderSagaState<span class="o">(</span>Order order, List&lt;OrderLine&gt; orderLines, Account account<span class="o">){</span>
-        super<span class="o">()</span><span class="p">;</span>
-        this.order <span class="o">=</span> order<span class="p">;</span>
-        this.orderLines <span class="o">=</span> orderLines<span class="p">;</span>
-        this.account <span class="o">=</span> account<span class="p">;</span>
+    <span class="kd">public</span> <span class="nf">CreateOrderSagaState</span><span class="p">(</span><span class="n">Order</span> <span class="n">order</span><span class="p">,</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">OrderLine</span><span class="o">&gt;</span> <span class="n">orderLines</span><span class="p">,</span> <span class="n">Account</span> <span class="n">account</span><span class="p">){</span>
+        <span class="kd">super</span><span class="p">();</span>
+        <span class="k">this</span><span class="p">.</span><span class="na">order</span> <span class="o">=</span> <span class="n">order</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="na">orderLines</span> <span class="o">=</span> <span class="n">orderLines</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="na">account</span> <span class="o">=</span> <span class="n">account</span><span class="p">;</span>
 
-    <span class="o">}</span>
-<span class="o">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 </pre></div>
 </td></tr></table></div>
 <p><strong>SagaManagerクラス</strong></p>
@@ -1060,7 +1080,7 @@ public class CreateOrderSagaState extends SagaState<span class="o">{</span>
 各Stepの実行事に発生するビジネス例外をキャッチした場合は、完了済のSTEPの補償トランザクションを
 逆順に実行していく。補償トランザクションを実行した場合は、ビジネス例外をthrowし、Controllerクラスで例外ハンドリングし
 ユーザに注文完了できないことを通知する。</p>
-<div class="highlight-bash notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+<div class="highlight-java notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
  4
@@ -1088,37 +1108,592 @@ public class CreateOrderSagaState extends SagaState<span class="o">{</span>
 26
 27
 28
-29</pre></div></td><td class="code"><div class="highlight"><pre><span></span>//omitted
+29</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1">//omitted</span>
 
-@Component
-public class CreateOrderSagaManager <span class="o">{</span>
+<span class="nd">@Component</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CreateOrderSagaManager</span> <span class="p">{</span>
 
-    @Autowired
-    MessageSource messageSource<span class="p">;</span>
+    <span class="nd">@Autowired</span>
+    <span class="n">MessageSource</span> <span class="n">messageSource</span><span class="p">;</span>
 
 
-    @Autowired
-    CreateOrderSaga createOrderSaga<span class="p">;</span>
+    <span class="nd">@Autowired</span>
+    <span class="n">CreateOrderSaga</span> <span class="n">createOrderSaga</span><span class="p">;</span>
 
-    public void create <span class="o">(</span>CreateOrderSagaState createOrderSagaState<span class="o">)</span> throws BusinessException<span class="o">{</span>
-        List&lt;SagaParticipant&gt; <span class="nv">sagaDefinition</span> <span class="o">=</span> createOrderSaga.getSagaDefinition<span class="o">()</span><span class="p">;</span>
-        Deque&lt;SagaParticipant&gt; <span class="nv">sagaParticipantDoneList</span> <span class="o">=</span> new ArrayDeque&lt;&gt;<span class="o">()</span><span class="p">;</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">create</span> <span class="p">(</span><span class="n">CreateOrderSagaState</span> <span class="n">createOrderSagaState</span><span class="p">)</span> <span class="kd">throws</span> <span class="n">BusinessException</span><span class="p">{</span>
+        <span class="n">List</span><span class="o">&lt;</span><span class="n">SagaParticipant</span><span class="o">&gt;</span> <span class="n">sagaDefinition</span> <span class="o">=</span> <span class="n">createOrderSaga</span><span class="p">.</span><span class="na">getSagaDefinition</span><span class="p">();</span>
+        <span class="n">Deque</span><span class="o">&lt;</span><span class="n">SagaParticipant</span><span class="o">&gt;</span> <span class="n">sagaParticipantDoneList</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayDeque</span><span class="o">&lt;&gt;</span><span class="p">();</span>
 
-        <span class="k">for</span> <span class="o">(</span>SagaParticipant sagaParticipant : sagaDefinition<span class="o">){</span>
-            try<span class="o">{</span>
-                sagaParticipant.forwardTransaction<span class="o">(</span>createOrderSagaState<span class="o">)</span><span class="p">;</span>
-                sagaParticipantDoneList.push<span class="o">(</span>sagaParticipant<span class="o">)</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">SagaParticipant</span> <span class="n">sagaParticipant</span> <span class="p">:</span> <span class="n">sagaDefinition</span><span class="p">){</span>
+            <span class="k">try</span><span class="p">{</span>
+                <span class="n">sagaParticipant</span><span class="p">.</span><span class="na">forwardTransaction</span><span class="p">(</span><span class="n">createOrderSagaState</span><span class="p">);</span>
+                <span class="n">sagaParticipantDoneList</span><span class="p">.</span><span class="na">push</span><span class="p">(</span><span class="n">sagaParticipant</span><span class="p">);</span>
 
-            <span class="o">}</span>catch <span class="o">(</span>BusinessException e<span class="o">){</span>
-                sagaParticipantDoneList.pop<span class="o">()</span>.compensatingTransaction<span class="o">(</span>createOrderSagaState<span class="o">)</span><span class="p">;</span>
-                throw e<span class="p">;</span>
-            <span class="o">}</span>
+            <span class="p">}</span><span class="k">catch</span> <span class="p">(</span><span class="n">BusinessException</span> <span class="n">e</span><span class="p">){</span>
+                <span class="n">sagaParticipantDoneList</span><span class="p">.</span><span class="na">pop</span><span class="p">().</span><span class="na">compensatingTransaction</span><span class="p">(</span><span class="n">createOrderSagaState</span><span class="p">);</span>
+                <span class="k">throw</span> <span class="n">e</span><span class="p">;</span>
+            <span class="p">}</span>
 
-        <span class="o">}</span>
-    <span class="o">}</span>
-<span class="o">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 </pre></div>
 </td></tr></table></div>
+</div>
+</div>
+<div class="section" id="id5">
+<h2>ECサイトの配達サービス拡張<a class="headerlink" href="#id5" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>Delivery Serviceとの連携を、注文作成Sagaトランザクションに追加し、注文完了時に、
+配達予定日がわかるようにする。また、ユーザは、自身の注文の配達予定を調べることのできる一覧表示機能と、チャット問い合わせ機能を追加する。
+一つのSaga Transaction内で連携するサービス増加による可用性低下を
+防ぐため、BFFであるOrder Serviceから各マイクロサービスの呼び出しは、Message Brokerを経由した非同期通信に変更する。</p>
+<div class="section" id="id6">
+<h3>追加の業務機能<a class="headerlink" href="#id6" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="8%" />
+<col width="31%" />
+<col width="31%" />
+<col width="31%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">サービス</th>
+<th class="head">機能</th>
+<th class="head">内容</th>
+<th class="head">備考</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Delivery</td>
+<td>配達計画一覧表示</td>
+<td>指定したメールアドレスに一致する注文の配達計画一覧を表示する</td>
+<td>--</td>
+</tr>
+<tr class="row-odd"><td>Delivery</td>
+<td>配達計画チャット問い合わせ</td>
+<td>指定した注文IDに一致する配達計画をチャット形式で回答する</td>
+<td>--</td>
+</tr>
+<tr class="row-even"><td>Delivery</td>
+<td>配達計画作成</td>
+<td>注文の配達計画を作成する</td>
+<td>検証用に配達計画作成は一定の確率で失敗するようにする。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id7">
+<h3>システム全体構成（ヘキサゴナルアーキテクチャ）<a class="headerlink" href="#id7" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="figure align-center" id="id22">
+<a class="reference internal image-reference" href="./_static/img/AsyncArchitecture.png"><img alt="" src="./_static/img/AsyncArchitecture.png" /></a>
+<p class="caption"><span class="caption-text">システム全体構成（ヘキサゴナルアーキテクチャ）</span></p>
+</div>
+</div>
+<div class="section" id="id8">
+<h3>追加のシステム機能<a class="headerlink" href="#id8" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="8%" />
+<col width="31%" />
+<col width="31%" />
+<col width="31%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">サービス</th>
+<th class="head">機能</th>
+<th class="head">内容</th>
+<th class="head">備考</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>全サービス</td>
+<td>非同期通信</td>
+<td>マイクロサービス間の、メッセージブローカを経由した非同期通信</td>
+<td>--</td>
+</tr>
+<tr class="row-odd"><td>全サービス</td>
+<td>メッセージング</td>
+<td>マイクロサービスの処理を呼び出すためのコマンドと処理結果の返信を、spring-messagingを使って定義する</td>
+<td>--</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="spring">
+<h3>追加のSpringライブラリ<a class="headerlink" href="#spring" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="8%" />
+<col width="31%" />
+<col width="31%" />
+<col width="31%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">サービス</th>
+<th class="head">ライブラリ名</th>
+<th class="head">内容</th>
+<th class="head">備考</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>全サービス</td>
+<td>Spring Cloud Stream</td>
+<td>スケーラブルでイベントドリブンなマイクロサービス連携を実現するメッセージングを実現するフレームワーク</td>
+<td>--</td>
+</tr>
+<tr class="row-odd"><td>全サービス</td>
+<td>spring-messaging</td>
+<td>メッセージを抽象化するインタフェース</td>
+<td>&#160;</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id9">
+<h3>追加のインフラ<a class="headerlink" href="#id9" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="8%" />
+<col width="31%" />
+<col width="31%" />
+<col width="31%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">サービス</th>
+<th class="head">インフラ</th>
+<th class="head">内容</th>
+<th class="head">備考</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>全サービス</td>
+<td>Message Broker</td>
+<td>--</td>
+<td>各マイクロサービス間ごとに、チャネルを定義し、使用する。本検証では、RabbitMQを使用する。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id10">
+<h3>設計概要<a class="headerlink" href="#id10" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>RESTでは、URI、メソッド、クエリパラメータ等の組み合せで特定していた処理を、
+メッセージングでは、チャネルとコマンドの組み合わせで処理で特定する。</p>
+<p>RESTでは、RestOperationsで実現していたレスポンス機構、正常/異常のレスポンスの定義を、独自に定義する必要がある。
+具体的には、メッセージ送信側は、レスポンス用のチャネルを定義し、それを受信側に伝える必要があるし、
+送受信の両側で、レスポンスメッセージにおける正常/異常の定義を共有する必要もある。</p>
+</div>
+<div class="section" id="id11">
+<h3>チャネルの設計<a class="headerlink" href="#id11" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="8%" />
+<col width="31%" />
+<col width="31%" />
+<col width="31%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">分類</th>
+<th class="head">チャネル</th>
+<th class="head">内容</th>
+<th class="head">備考</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>リクエスト</td>
+<td>Account service command channel</td>
+<td>アカウントサービスへのコマンドを送信するチャネル</td>
+<td>リクエスト用のチャネルは、各マイクロサービス毎に定義する。</td>
+</tr>
+<tr class="row-odd"><td>リクエスト</td>
+<td>Goods service command channel</td>
+<td>商品サービスへのコマンドを送信するチャネル</td>
+<td>リクエスト用のチャネルは、各マイクロサービス毎に定義する。</td>
+</tr>
+<tr class="row-even"><td>リクエスト</td>
+<td>Delivery Service command channel</td>
+<td>配達サービスへのコマンドを送信するチャネル</td>
+<td>リクエスト用のチャネルは、各マイクロサービス毎に定義する。</td>
+</tr>
+<tr class="row-odd"><td>レスポンス</td>
+<td>Create order saga reply channel</td>
+<td>注文作成のSaga transaction内の各トランザクションの結果をマイクロサービスから受け取るチャネル</td>
+<td>レスポンス用のチャネルは各Sagaトランザクションごとに定義する。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id12">
+<h3>コマンドの設計<a class="headerlink" href="#id12" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>//Todo 各サービスごとにコマンドを定義する。Serviceクラスのメソッドごとに定義すれば良いはず。</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="8%" />
+<col width="31%" />
+<col width="31%" />
+<col width="31%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">サービス</th>
+<th class="head">コマンド名</th>
+<th class="head">内容</th>
+<th class="head">備考</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Delivery</td>
+<td>ScheduleDeliveryCommand</td>
+<td>配達計画作成処理を呼び出すコマンド</td>
+<td>--</td>
+</tr>
+<tr class="row-odd"><td>Delivery</td>
+<td>CancelDeliveryCommand</td>
+<td>配達計画キャンセル処理を呼び出すコマンド</td>
+<td>--</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id13">
+<h3>コマンド、チャネル、コマンド送信処理の実装<a class="headerlink" href="#id13" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>以下のようにCommandインタフェースを定義する。</p>
+<div class="highlight-java notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1">//omitted</span>
+
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">Command</span> <span class="p">{</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>実装クラスでは、各コマンド実行に必要なステート情報をフィールド定義する。
+以下は、ScheduleDeliveryCommandの例。</p>
+<div class="highlight-java notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1">//omitted</span>
+
+<span class="nd">@AllArgsConstructor</span>
+<span class="nd">@NoArgsConstructor</span>
+<span class="nd">@Builder</span>
+<span class="nd">@Data</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ScheduleDeliveryCommand</span> <span class="kd">implements</span> <span class="n">Command</span><span class="p">,</span> <span class="n">Serializable</span> <span class="p">{</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">long</span> <span class="n">serialVersionUID</span> <span class="o">=</span> <span class="mi">1L</span><span class="p">;</span>
+
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">id</span><span class="p">;</span>
+
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">email</span><span class="p">;</span>
+
+    <span class="kd">private</span> <span class="n">Date</span> <span class="n">orderDate</span><span class="p">;</span>
+
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>以下は、メッセージ送信を実装した、Delivery ServiceのRepositoryクラスの実装。
+&#64;EnableBinding(Source.class)の箇所で、チャネルを定義した、Source.classを指定している。
+Sourceをインジェクションし、source.output()でチャネル定義を取ってきて、.send()で引数に指定したコマンドを送信する。
+MessageBuilder.withPayload(command).build()で、Messageのペイロードに、commandを指定している。</p>
+<div class="highlight-java notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1">//omitted</span>
+
+<span class="kn">import</span> <span class="nn">org.springframework.cloud.stream.messaging.Source</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.messaging.support.MessageBuilder</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.stereotype.Component</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.cloud.stream.annotation.EnableBinding</span><span class="p">;</span>
+
+<span class="nd">@Component</span>
+<span class="nd">@EnableBinding</span><span class="p">(</span><span class="n">Source</span><span class="p">.</span><span class="na">class</span><span class="p">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">DeliveryRepositoryImpl</span> <span class="kd">implements</span> <span class="n">DeliveryRepository</span><span class="p">{</span>
+
+    <span class="nd">@Autowired</span>
+    <span class="n">Source</span> <span class="n">source</span><span class="p">;</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">send</span><span class="p">(</span><span class="n">Command</span> <span class="n">command</span><span class="p">)</span> <span class="kd">throws</span> <span class="n">BusinessException</span> <span class="p">{</span>
+        <span class="n">source</span><span class="p">.</span><span class="na">output</span><span class="p">().</span><span class="na">send</span><span class="p">(</span><span class="n">MessageBuilder</span><span class="p">.</span><span class="na">withPayload</span><span class="p">(</span><span class="n">command</span><span class="p">).</span><span class="na">build</span><span class="p">());</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>以下はデフォルトで用意されている、チャネルの定義クラス。Outputという名称のチャネルが定義さている。</p>
+<div class="highlight-java notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">package</span> <span class="nn">org.springframework.cloud.stream.messaging</span><span class="p">;</span>
+
+<span class="kn">import</span> <span class="nn">org.springframework.cloud.stream.annotation.Output</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.messaging.MessageChannel</span><span class="p">;</span>
+
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">Source</span> <span class="p">{</span>
+
+    <span class="n">String</span> <span class="n">OUTPUT</span> <span class="o">=</span> <span class="s">&quot;output&quot;</span><span class="p">;</span>
+
+    <span class="nd">@Output</span><span class="p">(</span><span class="n">Source</span><span class="p">.</span><span class="na">OUTPUT</span><span class="p">)</span>
+    <span class="n">MessageChannel</span> <span class="nf">output</span><span class="p">();</span>
+
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>以下は、application.ymlのSpring cloud streamに関する定義である。outputチャネルのdestination名の定義と、
+RabbitMQの定義がある。</p>
+<div class="highlight-yaml notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="nt">spring</span><span class="p">:</span>
+  <span class="nt">cloud</span><span class="p">:</span>
+    <span class="nt">stream</span><span class="p">:</span>
+      <span class="nt">bindings</span><span class="p">:</span>
+        <span class="nt">output</span><span class="p">:</span>
+          <span class="nt">destination</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">hello</span>
+
+  <span class="nt">rabbitmq</span><span class="p">:</span>
+    <span class="nt">addresses</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost:5672</span>
+    <span class="nt">username</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">guest</span>
+    <span class="nt">password</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">guest</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="id14">
+<h3>コマンド受信処理、レスポンスメッセージ定義の実装<a class="headerlink" href="#id14" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>以下は、コマンド受信時のCommandHandlerクラスの実装である。受け取ったコマンドに応じて、適切なServiceクラスのメソッドを呼ぶ。
+&#64;SendTo(Source.OUTPUT)によって、指定したチャネルに、レスポンスメッセージを送信する。
+レスポンスメッセージは、Serviceクラスのメソッド呼出で、正常に処理が終了した場合は、withSuccess()を呼出し、正常終了を返す。
+例外が発生した場合は、withFailure()を呼出し、異常終了を返す。</p>
+<div class="highlight-java notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">org.springframework.cloud.stream.annotation.EnableBinding</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.cloud.stream.annotation.StreamListener</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.cloud.stream.messaging.Sink</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.messaging.handler.annotation.SendTo</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.messaging.Message</span><span class="p">;</span>
+
+<span class="kn">import static</span> <span class="nn">com.example.delivery.apinfra.saga.command.common.CommandHandlerReplyBuilder.withSuccess</span><span class="p">;</span>
+
+<span class="nd">@EnableBinding</span><span class="p">(</span><span class="n">Sink</span><span class="p">.</span><span class="na">class</span><span class="p">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">DeliveryCommandHandler</span> <span class="p">{</span>
+
+    <span class="nd">@Autowired</span>
+    <span class="n">Mapper</span> <span class="n">mapper</span><span class="p">;</span>
+
+    <span class="nd">@Autowired</span>
+    <span class="n">DeliveryService</span> <span class="n">deliveryService</span><span class="p">;</span>
+
+    <span class="nd">@StreamListener</span><span class="p">(</span><span class="n">Sink</span><span class="p">.</span><span class="na">INPUT</span><span class="p">)</span>
+    <span class="nd">@SendTo</span><span class="p">(</span><span class="n">Source</span><span class="p">.</span><span class="na">OUTPUT</span><span class="p">)</span>
+    <span class="kd">public</span> <span class="n">Message</span> <span class="nf">receive</span><span class="p">(</span><span class="n">Command</span> <span class="n">command</span><span class="p">){</span>
+
+        <span class="k">if</span><span class="p">(</span><span class="n">command</span> <span class="k">instanceof</span> <span class="n">ScheduleDeliveryCommand</span><span class="p">){</span>
+            <span class="n">Delivery</span> <span class="n">delivery</span> <span class="o">=</span> <span class="n">mapper</span><span class="p">.</span><span class="na">map</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">Delivery</span><span class="p">.</span><span class="na">class</span><span class="p">);</span>
+            <span class="n">deliveryService</span><span class="p">.</span><span class="na">schedule</span><span class="p">(</span><span class="n">delivery</span><span class="p">);</span>
+            <span class="k">return</span> <span class="n">withSuccess</span><span class="p">();</span>
+        <span class="p">}</span><span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">command</span> <span class="k">instanceof</span> <span class="n">CancelDeliveryCommand</span><span class="p">){</span>
+            <span class="n">Delivery</span> <span class="n">delivery</span> <span class="o">=</span> <span class="n">mapper</span><span class="p">.</span><span class="na">map</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">Delivery</span><span class="p">.</span><span class="na">class</span><span class="p">);</span>
+            <span class="n">deliveryService</span><span class="p">.</span><span class="na">cancel</span><span class="p">(</span><span class="n">delivery</span><span class="p">);</span>
+        <span class="p">}</span>
+
+    <span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>以下は、レスポンスメッセージを定義するクラスの実装である。
+Message型のレスポンスメッセージとして、ヘッダーに処理ステータス情報を付与している。</p>
+<div class="highlight-java notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">org.springframework.messaging.Message</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.messaging.support.MessageBuilder</span><span class="p">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CommandHandlerReplyBuilder</span> <span class="p">{</span>
+
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">Message</span> <span class="nf">with</span><span class="p">(</span><span class="n">T</span> <span class="n">reply</span><span class="p">,</span> <span class="n">CommandReplyOutcome</span> <span class="n">outcome</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">MessageBuilder</span> <span class="n">messageBuilder</span> <span class="o">=</span> <span class="n">MessageBuilder</span>
+                <span class="p">.</span><span class="na">withPayload</span><span class="p">(</span><span class="n">reply</span><span class="p">)</span>
+                <span class="p">.</span><span class="na">setHeader</span><span class="p">(</span><span class="n">ReplyMessageHeaders</span><span class="p">.</span><span class="na">REPLY_OUTCOME</span><span class="p">,</span> <span class="n">outcome</span><span class="p">.</span><span class="na">name</span><span class="p">())</span>
+                <span class="p">.</span><span class="na">setHeader</span><span class="p">(</span><span class="n">ReplyMessageHeaders</span><span class="p">.</span><span class="na">REPLY_TYPE</span><span class="p">,</span> <span class="n">reply</span><span class="p">.</span><span class="na">getClass</span><span class="p">().</span><span class="na">getName</span><span class="p">());</span>
+        <span class="k">return</span> <span class="n">messageBuilder</span><span class="p">.</span><span class="na">build</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">Message</span> <span class="nf">withSuccess</span><span class="p">(</span><span class="n">Object</span> <span class="n">reply</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">with</span><span class="p">(</span><span class="n">reply</span><span class="p">,</span> <span class="n">CommandReplyOutcome</span><span class="p">.</span><span class="na">SUCCESS</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">Message</span> <span class="nf">withSuccess</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">withSuccess</span><span class="p">(</span><span class="k">new</span> <span class="n">Success</span><span class="p">());</span>
+    <span class="p">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">Message</span> <span class="nf">withFailure</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">withFailure</span><span class="p">(</span><span class="k">new</span> <span class="n">Failure</span><span class="p">());</span>
+    <span class="p">}</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">Message</span> <span class="nf">withFailure</span><span class="p">(</span><span class="n">Object</span> <span class="n">reply</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">with</span><span class="p">(</span><span class="n">reply</span><span class="p">,</span> <span class="n">CommandReplyOutcome</span><span class="p">.</span><span class="na">FAILURE</span><span class="p">);</span>
+    <span class="p">}</span>
+
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>参考：<a class="reference external" href="https://github.com/eventuate-tram/eventuate-tram-core/tree/master/eventuate-tram-commands/src/main/java/io/eventuate/tram/commands">https://github.com/eventuate-tram/eventuate-tram-core/tree/master/eventuate-tram-commands/src/main/java/io/eventuate/tram/commands</a></p>
+<p>上記リンクとの違いは、本検証用には、spring-messagingのMessageBuilderをそのまま使っている。</p>
+</div>
+<div class="section" id="saga">
+<h3>Sagaトランザクション設計と実装<a class="headerlink" href="#saga" title="このヘッドラインへのパーマリンク">¶</a></h3>
+</div>
+</div>
+<div class="section" id="id15">
+<h2>ECサイトのフロントエンド改善<a class="headerlink" href="#id15" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="section" id="id16">
+<h3>追加の業務機能<a class="headerlink" href="#id16" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="8%" />
+<col width="31%" />
+<col width="31%" />
+<col width="31%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">サービス</th>
+<th class="head">機能</th>
+<th class="head">内容</th>
+<th class="head">備考</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Order</td>
+<td>商品画像表示</td>
+<td>指定したメールアドレスに一致する注文の配達計画一覧を表示する</td>
+<td>--</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id17">
+<h3>追加のシステム機能<a class="headerlink" href="#id17" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="8%" />
+<col width="31%" />
+<col width="31%" />
+<col width="31%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">サービス</th>
+<th class="head">機能</th>
+<th class="head">内容</th>
+<th class="head">備考</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>全サービス</td>
+<td>非同期通信</td>
+<td>マイクロサービス間の、メッセージブローカを経由した非同期通信</td>
+<td>--</td>
+</tr>
+<tr class="row-odd"><td>全サービス</td>
+<td>メッセージング</td>
+<td>マイクロサービスの処理を呼び出すためのコマンドと処理結果の返信を、spring-messagingを使って定義する</td>
+<td>--</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>
@@ -1131,7 +1706,7 @@ public class CreateOrderSagaManager <span class="o">{</span>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="WebAPI.html" class="btn btn-neutral float-right" title="Web API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="Microservice-Communication.html" class="btn btn-neutral float-right" title="Microservice Communication" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="Docker.html" class="btn btn-neutral float-left" title="Docker" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

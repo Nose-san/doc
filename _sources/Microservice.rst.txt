@@ -3,7 +3,7 @@
 Microservice
 =========================
 
-簡易ECサイトののマイクロサービスアーキテクチャ化
+ECサイトのマイクロサービスアーキテクチャ化
 --------------
 terasolunaチュートリアルの簡易ECサイトを使って、マイクロサービスアーキテクチャ移行検証を行った。
 
@@ -59,7 +59,7 @@ Account ServiceとGoods Serviceは、BFFから呼び出される、マイクロ�
 ^^^^^^^^^^^^^^^
 
 
-.. figure:: ../_static/img/hexArchitecture.png
+.. figure:: ./_static/img/hexArchitecture.png
    :scale: 40%
    :align: center
    :alt: 
@@ -103,7 +103,7 @@ ModelクラスのGoodsのListを受け取っている。それを、Mapperを使
 総件数については、レスポンスヘッダーに入れている。
 また、BusinessExceptionは、throwsし例外ハンドラに例外処理は、委譲している。
 
-.. sourcecode:: bash                
+.. sourcecode:: java                
         :linenos:
 
         //omitted
@@ -148,7 +148,7 @@ MVCアプリケーションには存在しないREST APIサービス特有のク
 サービス内部の業務ロジックで用いるドメインオブジェクトと、サービス外部提向けに提供する際の、情報は異る可能性を考慮し、
 Modelクラスとは別に、Resourceクラスを用意する。
 
-.. sourcecode:: bash                
+.. sourcecode:: java                
         :linenos:
 
         //omitted
@@ -178,7 +178,7 @@ Modelクラスとは別に、Resourceクラスを用意する。
 
 **Modelクラス**
 
-.. sourcecode:: bash                
+.. sourcecode:: java                
         :linenos:
 
         //omitted
@@ -225,7 +225,7 @@ Modelクラスとは別に、Resourceクラスを用意する。
 以下は商品情報更新処理のServiceクラスのメソッドである。REST Clientから送られたきた商品のStockが、0を下回るとき、
 ビジネス例外をthrowする。そうでない場合は、Repositoryクラスを呼び、データを永続化する。
 
-.. sourcecode:: bash                
+.. sourcecode:: java                
         :linenos:
 
         //omitted
@@ -255,7 +255,7 @@ Modelクラスとは別に、Resourceクラスを用意する。
 
 MyBatis3を使った、Repositoryクラスの実装である。
 
-.. sourcecode:: bash                
+.. sourcecode:: java                
         :linenos:
 
         //omitted
@@ -281,7 +281,7 @@ MyBatis3を使った、Repositoryクラスの実装である。
 Modelクラスのオブジェクトを返り値として受け取りたい場合は、
 resultMapで、オブジェクトフィールド名とテーブルのカラム名を対応づける。
 
-.. sourcecode:: bash                
+.. sourcecode:: xml      
         :linenos:
 
         <?xml version="1.0" encoding="UTF-8"?>
@@ -327,7 +327,7 @@ Contorollerクラス内の各メソッドで発生する例外を横断してハ
 エラーコード、エラーメッセージが格納されているbusinessExceptionをbodyに埋め込み、400エラー（BAD REQUEST）を
 REST CLIENTに返している。
 
-.. sourcecode:: bash                
+.. sourcecode:: java                
         :linenos:
 
         //omitted
@@ -369,7 +369,7 @@ Account SerivceのREST APIの設計と実装
 Goods Seriviceとの実装上の違いは、リクエストボディの引数に、@Validatedを付けて、バリデーション処理を行っている。
 バリデーション例外が発生した場合は、例外ハンドラクラスで、ハンドリングを行う。
 
-.. sourcecode:: bash                
+.. sourcecode:: java                
         :linenos:
 
         //omitted
@@ -388,7 +388,7 @@ Goods Seriviceとの実装上の違いは、リクエストボディの引数に
 
 **Resourceクラス**
 
-.. sourcecode:: bash                
+.. sourcecode:: java                
         :linenos:
 
         //omitted
@@ -409,7 +409,7 @@ Goods Seriviceとの実装上の違いは、リクエストボディの引数に
 以下は、アカウント更新処理メソッドの実装である。REST CLIENTから累計購入金額が購入額上限を上回った場合、
 ビジネス例外をthrowする。そうでない場合は、Repositoryクラスを呼び、データを永続化する。
 
-.. sourcecode:: bash
+.. sourcecode:: java
         :linenos:
 
         //omitted
@@ -442,7 +442,7 @@ Order SerivceのSaga Transactionの設計と実装
 失敗以前に行った変更を、打ち消すトランザクションである。
 例えば、以下の例では、フォーワードトランザクションTn+1が失敗した場合、補償トランザクションCnからC1を実行している。
 
-.. figure:: ../_static/img/conpensatingTransaction.png
+.. figure:: ./_static/img/conpensatingTransaction.png
    :scale: 40%
    :align: center
    :alt: 
@@ -475,7 +475,7 @@ Order ServiceのServiceクラスから、Sagaの実行に必要な情報をSagaS
 SagaManagerクラスから実行。Sagaの定義（各STEPのトランザクションの定義とSTEPの順序の定義）は、
 SagaPaticipantクラスとSagaDefinitionクラスを使ってDIする。
 
-.. figure:: ../_static/img/sagaSequence.png
+.. figure:: ./_static/img/sagaSequence.png
    :scale: 40%
    :align: center
    :alt: 
@@ -487,7 +487,7 @@ SagaPaticipantクラスとSagaDefinitionクラスを使ってDIする。
 以下の、フォーワードトランザクションと、補償トランザクションのメソッドの組み合わせを、
 インタフェース定義している。ビジネス例外をthrowし、SagaParticipantを実行するSagaManagerで例外ハンドリングできるようにする。
 
-.. sourcecode:: bash
+.. sourcecode:: java
         :linenos:
 
         //omitted
@@ -502,7 +502,7 @@ Sagaトランザクションの各STEPは、自身が行いたい処理を実装
 以下は、商品注文時、商品在庫を減らす処理をフォーワードトランザクションとして定義し、
 商品在庫を増やす処理を補償トランザクションで定義している。
 
-.. sourcecode:: bash
+.. sourcecode:: java
         :linenos:
 
         //omitted
@@ -536,7 +536,7 @@ Sagaトランザクションの各STEPは、自身が行いたい処理を実装
 DIしておき、Sagaを実際に実行する、SagaManagerクラスから使えるようにしておく。
 
 
-.. sourcecode:: bash
+.. sourcecode:: java
         :linenos:
 
         //omitted
@@ -564,7 +564,7 @@ DIしておき、Sagaを実際に実行する、SagaManagerクラスから使え
 Sagaの実行時に必要な状態を保持するクラス。以下は、商品注文処理に必要な、
 注文商品情報やアカウント情報を保持している。
 
-.. sourcecode:: bash
+.. sourcecode:: java
         :linenos:
 
         //omitted
@@ -594,7 +594,7 @@ Sagaの定義と状態を使って、実際にSagaを実行するクラス。
 逆順に実行していく。補償トランザクションを実行した場合は、ビジネス例外をthrowし、Controllerクラスで例外ハンドリングし
 ユーザに注文完了できないことを通知する。
 
-.. sourcecode:: bash
+.. sourcecode:: java
         :linenos:
 
         //omitted
@@ -629,5 +629,318 @@ Sagaの定義と状態を使って、実際にSagaを実行するクラス。
 
 
 
+ECサイトの配達サービス拡張
+--------------
+
+Delivery Serviceとの連携を、注文作成Sagaトランザクションに追加し、注文完了時に、
+配達予定日がわかるようにする。また、ユーザは、自身の注文の配達予定を調べることのできる一覧表示機能と、チャット問い合わせ機能を追加する。
+一つのSaga Transaction内で連携するサービス増加による可用性低下を
+防ぐため、BFFであるOrder Serviceから各マイクロサービスの呼び出しは、Message Brokerを経由した非同期通信に変更する。
 
 
+追加の業務機能
+^^^^^^^^^^^^^^^
+
+.. csv-table::
+    :header: サービス, 機能, 内容, 備考
+    :widths: 5, 20, 20, 20
+
+    Delivery, 配達計画一覧表示, 指定したメールアドレスに一致する注文の配達計画一覧を表示する, --
+    Delivery, 配達計画チャット問い合わせ, 指定した注文IDに一致する配達計画をチャット形式で回答する, --
+    Delivery, 配達計画作成, 注文の配達計画を作成する, 検証用に配達計画作成は一定の確率で失敗するようにする。
+
+システム全体構成（ヘキサゴナルアーキテクチャ）
+^^^^^^^^^^^^^^^
+
+.. figure:: ./_static/img/AsyncArchitecture.png
+   :scale: 40%
+   :align: center
+   :alt: 
+   
+   システム全体構成（ヘキサゴナルアーキテクチャ）
+
+
+追加のシステム機能
+^^^^^^^^^^^^^^^
+
+.. csv-table::
+    :header: サービス, 機能, 内容, 備考
+    :widths: 5, 20, 20, 20
+
+    全サービス, 非同期通信, マイクロサービス間の、メッセージブローカを経由した非同期通信, --
+    全サービス, メッセージング, マイクロサービスの処理を呼び出すためのコマンドと処理結果の返信を、spring-messagingを使って定義する, --
+
+
+追加のSpringライブラリ
+^^^^^^^^^^^^^^^
+
+.. csv-table::
+    :header: サービス, ライブラリ名, 内容, 備考
+    :widths: 5, 20, 20, 20
+
+    全サービス, Spring Cloud Stream, スケーラブルでイベントドリブンなマイクロサービス連携を実現するメッセージングを実現するフレームワーク, --
+    全サービス, spring-messaging, メッセージを抽象化するインタフェース
+
+
+追加のインフラ
+^^^^^^^^^^^^^^^
+
+.. csv-table::
+    :header: サービス, インフラ, 内容, 備考
+    :widths: 5, 20, 20, 20
+
+    全サービス, Message Broker ,-- ,各マイクロサービス間ごとに、チャネルを定義し、使用する。本検証では、RabbitMQを使用する。
+
+
+設計概要
+^^^^^^^^^^^
+
+RESTでは、URI、メソッド、クエリパラメータ等の組み合せで特定していた処理を、
+メッセージングでは、チャネルとコマンドの組み合わせで処理で特定する。
+
+RESTでは、RestOperationsで実現していたレスポンス機構、正常/異常のレスポンスの定義を、独自に定義する必要がある。
+具体的には、メッセージ送信側は、レスポンス用のチャネルを定義し、それを受信側に伝える必要があるし、
+送受信の両側で、レスポンスメッセージにおける正常/異常の定義を共有する必要もある。
+
+
+チャネルの設計
+^^^^^^^^^^^^^^^^
+
+.. csv-table::
+    :header: 分類, チャネル, 内容, 備考
+    :widths: 5, 20, 20, 20
+
+    リクエスト, Account service command channel ,アカウントサービスへのコマンドを送信するチャネル , リクエスト用のチャネルは、各マイクロサービス毎に定義する。
+    リクエスト, Goods service command channel , 商品サービスへのコマンドを送信するチャネル , リクエスト用のチャネルは、各マイクロサービス毎に定義する。
+    リクエスト, Delivery Service command channel , 配達サービスへのコマンドを送信するチャネル , リクエスト用のチャネルは、各マイクロサービス毎に定義する。
+    レスポンス, Create order saga reply channel , 注文作成のSaga transaction内の各トランザクションの結果をマイクロサービスから受け取るチャネル , レスポンス用のチャネルは各Sagaトランザクションごとに定義する。
+
+
+コマンドの設計
+^^^^^^^^^^^^^^^^
+
+//Todo 各サービスごとにコマンドを定義する。Serviceクラスのメソッドごとに定義すれば良いはず。
+
+.. csv-table::
+    :header: サービス, コマンド名, 内容, 備考
+    :widths: 5, 20, 20, 20
+
+    Delivery, ScheduleDeliveryCommand, 配達計画作成処理を呼び出すコマンド , --
+    Delivery, CancelDeliveryCommand, 配達計画キャンセル処理を呼び出すコマンド , --
+
+
+コマンド、チャネル、コマンド送信処理の実装
+^^^^^^^^^^^^^
+
+以下のようにCommandインタフェースを定義する。
+
+.. sourcecode:: java
+        :linenos:
+
+        //omitted
+
+        public interface Command {
+        }
+
+
+実装クラスでは、各コマンド実行に必要なステート情報をフィールド定義する。
+以下は、ScheduleDeliveryCommandの例。
+
+.. sourcecode:: java
+        :linenos:
+
+        //omitted
+
+        @AllArgsConstructor
+        @NoArgsConstructor
+        @Builder
+        @Data
+        public class ScheduleDeliveryCommand implements Command, Serializable {
+
+            private static final long serialVersionUID = 1L;
+
+            private String id;
+
+            private String email;
+
+            private Date orderDate;
+
+        }
+
+以下は、メッセージ送信を実装した、Delivery ServiceのRepositoryクラスの実装。
+@EnableBinding(Source.class)の箇所で、チャネルを定義した、Source.classを指定している。
+Sourceをインジェクションし、source.output()でチャネル定義を取ってきて、.send()で引数に指定したコマンドを送信する。
+MessageBuilder.withPayload(command).build()で、Messageのペイロードに、commandを指定している。
+
+.. sourcecode:: java
+        :linenos:
+
+        //omitted
+
+        import org.springframework.cloud.stream.messaging.Source;
+        import org.springframework.messaging.support.MessageBuilder;
+        import org.springframework.stereotype.Component;
+        import org.springframework.cloud.stream.annotation.EnableBinding;
+
+        @Component
+        @EnableBinding(Source.class)
+        public class DeliveryRepositoryImpl implements DeliveryRepository{
+
+            @Autowired
+            Source source;
+
+            @Override
+            public void send(Command command) throws BusinessException {
+                source.output().send(MessageBuilder.withPayload(command).build());
+            }
+        }
+
+以下はデフォルトで用意されている、チャネルの定義クラス。Outputという名称のチャネルが定義さている。
+
+.. sourcecode:: java
+        :linenos:
+
+        package org.springframework.cloud.stream.messaging;
+
+        import org.springframework.cloud.stream.annotation.Output;
+        import org.springframework.messaging.MessageChannel;
+
+        public interface Source {
+
+            String OUTPUT = "output";
+
+            @Output(Source.OUTPUT)
+            MessageChannel output();
+
+        }
+
+
+以下は、application.ymlのSpring cloud streamに関する定義である。outputチャネルのdestination名の定義と、
+RabbitMQの定義がある。
+
+.. sourcecode:: yaml
+        :linenos:
+
+        spring:
+          cloud:
+            stream:
+              bindings:
+                output:
+                  destination: hello
+
+          rabbitmq:
+            addresses: localhost:5672
+            username: guest
+            password: guest
+
+
+コマンド受信処理、レスポンスメッセージ定義の実装
+^^^^^^^^^^^^^^^^^^^^
+
+以下は、コマンド受信時のCommandHandlerクラスの実装である。受け取ったコマンドに応じて、適切なServiceクラスのメソッドを呼ぶ。
+@SendTo(Source.OUTPUT)によって、指定したチャネルに、レスポンスメッセージを送信する。
+レスポンスメッセージは、Serviceクラスのメソッド呼出で、正常に処理が終了した場合は、withSuccess()を呼出し、正常終了を返す。
+例外が発生した場合は、withFailure()を呼出し、異常終了を返す。
+
+.. sourcecode:: java
+        :linenos:
+
+        import org.springframework.cloud.stream.annotation.EnableBinding;
+        import org.springframework.cloud.stream.annotation.StreamListener;
+        import org.springframework.cloud.stream.messaging.Sink;
+        import org.springframework.messaging.handler.annotation.SendTo;
+        import org.springframework.messaging.Message;
+
+        import static com.example.delivery.apinfra.saga.command.common.CommandHandlerReplyBuilder.withSuccess;
+
+        @EnableBinding(Sink.class)
+        public class DeliveryCommandHandler {
+
+            @Autowired
+            Mapper mapper;
+
+            @Autowired
+            DeliveryService deliveryService;
+
+            @StreamListener(Sink.INPUT)
+            @SendTo(Source.OUTPUT)
+            public Message receive(Command command){
+
+                if(command instanceof ScheduleDeliveryCommand){
+                    Delivery delivery = mapper.map(command, Delivery.class);
+                    deliveryService.schedule(delivery);
+                    return withSuccess();
+                }else if (command instanceof CancelDeliveryCommand){
+                    Delivery delivery = mapper.map(command, Delivery.class);
+                    deliveryService.cancel(delivery);
+                }
+
+            }
+
+
+以下は、レスポンスメッセージを定義するクラスの実装である。
+Message型のレスポンスメッセージとして、ヘッダーに処理ステータス情報を付与している。
+
+.. sourcecode:: java
+        :linenos:
+
+        import org.springframework.messaging.Message;
+        import org.springframework.messaging.support.MessageBuilder;
+
+        public class CommandHandlerReplyBuilder {
+
+
+            private static <T> Message with(T reply, CommandReplyOutcome outcome) {
+                MessageBuilder messageBuilder = MessageBuilder
+                        .withPayload(reply)
+                        .setHeader(ReplyMessageHeaders.REPLY_OUTCOME, outcome.name())
+                        .setHeader(ReplyMessageHeaders.REPLY_TYPE, reply.getClass().getName());
+                return messageBuilder.build();
+            }
+
+            public static Message withSuccess(Object reply) {
+                return with(reply, CommandReplyOutcome.SUCCESS);
+            }
+
+            public static Message withSuccess() {
+                return withSuccess(new Success());
+            }
+
+            public static Message withFailure() {
+                return withFailure(new Failure());
+            }
+            public static Message withFailure(Object reply) {
+                return with(reply, CommandReplyOutcome.FAILURE);
+            }
+
+        }
+
+参考：https://github.com/eventuate-tram/eventuate-tram-core/tree/master/eventuate-tram-commands/src/main/java/io/eventuate/tram/commands
+
+上記リンクとの違いは、本検証用には、spring-messagingのMessageBuilderをそのまま使っている。
+
+Sagaトランザクション設計と実装
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+ECサイトのフロントエンド改善
+--------------
+
+追加の業務機能
+^^^^^^^^^^^^^^^
+
+.. csv-table::
+    :header: サービス, 機能, 内容, 備考
+    :widths: 5, 20, 20, 20
+
+    Order, 商品画像表示, 指定したメールアドレスに一致する注文の配達計画一覧を表示する, --
+
+追加のシステム機能
+^^^^^^^^^^^^^^^
+
+.. csv-table::
+    :header: サービス, 機能, 内容, 備考
+    :widths: 5, 20, 20, 20
+
+    全サービス, 非同期通信, マイクロサービス間の、メッセージブローカを経由した非同期通信, --
+    全サービス, メッセージング, マイクロサービスの処理を呼び出すためのコマンドと処理結果の返信を、spring-messagingを使って定義する, --

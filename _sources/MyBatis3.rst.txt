@@ -40,3 +40,9 @@ Mapperのスキャン設定
 
            # offset=2, limit=3 の場合
            RowBounds rowBounds = new RowBounds(2, 3)
+
+
+トラブルシューティング
+====
+
+* data.sqlは空ファイルにしておくと、Spring boot 起動時にエラーになる。

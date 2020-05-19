@@ -1,6 +1,5 @@
 
 
-
 <!DOCTYPE html>
 <!--[if IE 8]><html class="no-js lt-ie9" lang="ja" > <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js" lang="ja" > <!--<![endif]-->
@@ -9,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>索引 &mdash; test_sphinx 1.0.0 ドキュメント</title>
+  <title>Microservice Communication &mdash; test_sphinx 1.0.0 ドキュメント</title>
   
 
   
@@ -35,8 +34,10 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="index" title="索引" href="#" />
-    <link rel="search" title="検索" href="search.html" /> 
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="Web API" href="WebAPI.html" />
+    <link rel="prev" title="Microservice" href="Microservice.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -81,7 +82,7 @@
             
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="Spring-Core.html">Spring Core</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Spring-Boot.html">Spring Boot</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Spring-Session.html">Spring Session</a></li>
@@ -93,7 +94,22 @@
 <li class="toctree-l1"><a class="reference internal" href="Spring-to-Spring-boot.html">SpringからSpring bootへの移行</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Docker.html">Docker</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Microservice.html">Microservice</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Microservice-Communication.html">Microservice Communication</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Microservice Communication</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">各クラスの関連性</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#service">Serviceクラス</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aggregate">Aggregateクラス</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#domain-event-publisher">Domain Event Publisherクラス</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#repository">Repositoryクラス</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#domain-event">Domain Event</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#domain-event-handler">Domain Event Handler</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">Domain event</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#event-enrichment">Event enrichmentという考え方</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="WebAPI.html">Web API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="git.html">git</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Lombok.html">Lombok</a></li>
@@ -150,12 +166,14 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li></li>
+      <li>Microservice Communication</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
+            <a href="_sources/Microservice-Communication.rst.txt" rel="nofollow"> View page source</a>
+          
         
       </li>
     
@@ -167,11 +185,44 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-
-<h1 id="index">索引</h1>
-
-<div class="genindex-jumpbox">
- 
+  <div class="section" id="microservice-communication">
+<h1>Microservice Communication<a class="headerlink" href="#microservice-communication" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<div class="section" id="id1">
+<h2>各クラスの関連性<a class="headerlink" href="#id1" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="section" id="service">
+<h3>Serviceクラス<a class="headerlink" href="#service" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>Aggregateに定義されたイベント作成メソッドを呼出し、返却されたイベントのリストをpublishする、DomainEventPublisherを呼び出す。</p>
+</div>
+<div class="section" id="aggregate">
+<h3>Aggregateクラス<a class="headerlink" href="#aggregate" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>サービスの状態を保持し、ドメインイベントを生成するメソッドを実装する。</p>
+</div>
+<div class="section" id="domain-event-publisher">
+<h3>Domain Event Publisherクラス<a class="headerlink" href="#domain-event-publisher" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>イベントをpublishする。
+Domain Event Publisherインタフェースを用意し、各サービスは実装。</p>
+</div>
+<div class="section" id="repository">
+<h3>Repositoryクラス<a class="headerlink" href="#repository" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>データの永続化を行う。</p>
+</div>
+<div class="section" id="domain-event">
+<h3>Domain Event<a class="headerlink" href="#domain-event" title="このヘッドラインへのパーマリンク">¶</a></h3>
+</div>
+<div class="section" id="domain-event-handler">
+<h3>Domain Event Handler<a class="headerlink" href="#domain-event-handler" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>ドメインイベントの定義</p>
+</div>
+</div>
+<div class="section" id="id2">
+<h2>Domain event<a class="headerlink" href="#id2" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="section" id="event-enrichment">
+<h3>Event enrichmentという考え方<a class="headerlink" href="#event-enrichment" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>受け手が処理時に必要になるドメインイベントの詳細情報をイベント内に含めてしまうこと。しかし、この手法にはメリデメがある。
+メリットは、詳細を含めずに送った場合は、受け手は、送信元から詳細情報を別途取ってくる処理が必要になり、オーバーヘッド増加を招く。
+デメリットは、詳細を含めてしまうとにより、イベント定義の変更の可能性が高まることである。</p>
+</div>
+</div>
 </div>
 
 
@@ -179,6 +230,15 @@
            
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="WebAPI.html" class="btn btn-neutral float-right" title="Web API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Microservice.html" class="btn btn-neutral float-left" title="Microservice" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
